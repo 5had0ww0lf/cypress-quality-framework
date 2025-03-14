@@ -43,6 +43,20 @@ class GreenKartPage {
   removeProduct() {
     cy.get('div.cart-preview.active').find('a.product-remove').click();
   }
+
+  getEmptyCartMessage() {
+    cy.get('.empty-cart').find('h2').should('have.text', 'You cart is empty!');
+
+  }
+
+  checkoutPage(selectCountry) {
+    cy.get('select').select(selectCountry);
+    cy.get('.chkAgree').click();
+    cy.get('.chkAgree').should('be.checked');
+    cy.get('button').contains('Proceed').click();
+    cy.get('div.wrapperTwo > span').contains('Thank you, your order has been placed successfully ');
+  }
+
 }
 
 module.exports = new GreenKartPage();

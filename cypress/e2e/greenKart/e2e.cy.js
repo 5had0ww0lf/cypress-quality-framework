@@ -46,6 +46,18 @@ describe('GreenKart', () => {
     GreenKartPage.addToCart();
     GreenKartPage.openCart();
     GreenKartPage.removeProduct();
+    GreenKartPage.getEmptyCartMessage();
     GreenKartPage.getCartItems().should('have.length', 0);
+  });
+
+  it.only('should buy a product', function() {
+    GreenKartPage.visit();
+    GreenKartPage.searchProduct(this.productData.productName);
+    GreenKartPage.addToCart();
+    GreenKartPage.openCart();
+    GreenKartPage.proceedToCheckout();
+    GreenKartPage.placeOrder();
+    GreenKartPage.checkoutPage(this.productData.country);
+    GreenKartPage.getTitle().should('include', 'GreenKart');
   });
 });
