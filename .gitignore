@@ -1,0 +1,8 @@
+# Cypress specific folders and files to ignore
+cypress/screenshots/
+cypress/videos/
+cypress/reports/
+cypress/downloads/
+
+# Node modules
+node_modules/
