@@ -1,6 +1,4 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
-
 This project has the goal to run test and generate comprehensive and detailed lighthouse and pa11y reports. Lighthouse is a tool for improving the performance, quality, and correctness of your web apps. Pa11y runs accessibility tests on your pages.
 
 # Getting Started
