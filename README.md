@@ -1,59 +1,89 @@
-# Cypress Automation Project
+# Introduction 
+TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
 
-This project showcases the use of Cypress for end-to-end testing on a sample e-commerce website. The tests are organized using the Page Object Model (POM) to ensure maintainability and reusability. The project includes various test cases to verify the functionality of the website, such as searching for products, adding products to the cart, and verifying the cart's contents.
+This project has the goal to run test and generate comprehensive and detailed lighthouse and pa11y reports. Lighthouse is a tool for improving the performance, quality, and correctness of your web apps. Pa11y runs accessibility tests on your pages.
 
-## Project Intent
+# Getting Started
+TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 
-The intent of this project is to demonstrate knowledge and proficiency in using Cypress for automated testing. The tests are designed to cover common user interactions on an e-commerce site, providing a comprehensive example of how to use Cypress for real-world testing scenarios.
+To be able to run tests and generate lighthouse reports, you'll need to do the following:
 
-## Setup Instructions
+**1. Clone the repo in your local machine**
 
-Follow these steps to set up the repository after cloning it to your machine:
+**2. Install Cypress:**
 
-### Prerequisites
+To install Cypress, follow this guide: https://docs.cypress.io/guides/getting-started/installing-cypress
 
-- Node.js (version 14 or higher)
-- npm (Node Package Manager)
+```    
+    $ yarn add cypress --dev
+    # or
+    $ npm install cypress --save-dev
+```
 
-### Steps
+**3. Install Lighthouse plugin:**
 
-1. **Clone the repository**
+To install Lighthouse, after installing Cypress, run this code in the terminal:
 
-   ```sh
-   git clone <repository-url>
-   cd <repository-directory>
+```    
+    $ yarn add -D @cypress-audit/lighthouse
+    # or
+    $ npm install --save-dev @cypress-audit/lighthouse
+```
 
-2. **Install dependencies**
-    ```sh
-    npm install
+**4. Install Pa11y plugin:**
 
-3. **Run Cypress Tests**
-    Open the Cypress Test Runner
-    ```sh
-    npx cypress open
-    ```
-    
-    Or run the tests in headless mode
-    ```sh
-    npx cypress run
-    ```
+To install Pa11y, after installing Cypress and Lighthouse, run this code in the terminal:
 
-### Key Files
+```    
+    $ yarn add -D @cypress-audit/pa11y
+    # or
+    $ npm install --save-dev @cypress-audit/pa11y
+```
 
-- cypress/e2e/greenKart/e2e.cy.js: Contains the test cases for the GreenKart page.
-- cypress/fixtures/product.json: Contains test data for the product.
-- cypress/support/GreenKartPage.js: Page Object Model for the GreenKart page.
-- cypress.config.js: Cypress configuration file.
+# Build and Test
 
-### Test Cases
+If you wanna run Cypress and view the test being executed, you can run the following:
 
-The project includes the following test cases:
+```    
+    $ npx cypress open
+```
+After that, select E2E testing and the test that you wanna run.
 
-1. **Visit the URL and check the title**
-2. **Search for a product**
-3. **Add a product to the cart**
-4. **Verify the cart is empty initially**
-5. **Verify the total amount in the cart**
-6. **Remove a product from the cart**
-7. **Buy a product**
+But you can run these tests in the headless mode:
 
+```    
+    $ npx cypress run
+```
+
+To run a specific test, type the following:
+
+```    
+    $ npx cypress run --spec cypress/e2e/lighthouse-html-report.cy.js
+```
+
+# Reports
+
+After running, reports can be found in 
+
+```    
+    cypress/reports
+```
+
+# NPM Scripts
+
+Instead of using terminal, scripts were added for reuse. To enable it, you may need to right click on Explorer and check "NPM Scripts".
+
+To open Cypress UI:
+```    
+    cy:open
+```
+
+To run all tests headlessly:
+```    
+    cy:open
+```
+
+To run one single test headlessly and in Chrome (other browsers may not not supported):
+```    
+    cy:run:lighthouse-html
+```
