@@ -2,7 +2,6 @@
 This project has the goal to run test and generate comprehensive and detailed lighthouse and pa11y reports. Lighthouse is a tool for improving the performance, quality, and correctness of your web apps. Pa11y runs accessibility tests on your pages.
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 
 To be able to run tests and generate lighthouse reports, you'll need to do the following:
 
