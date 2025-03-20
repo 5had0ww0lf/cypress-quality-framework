@@ -4,7 +4,7 @@ const { lighthouse, prepareAudit } = require('@cypress-audit/lighthouse')
 const { pa11y } = require('@cypress-audit/pa11y')
 
 // Update per branch/client for HTML file naming   
-const clientName = "formtech";
+const clientName = "greenkart";
 
 // Getting current date and time
 const now = new Date();

@@ -1,10 +1,10 @@
-it("generates Lighthouse HTML report for Dynacast", function () {
+it("generates Lighthouse HTML report for GreenKart", function () {
 
     // Define the reports directory
     const reportsDir = 'cypress/reports/';
   
     // Unique name to insert for this spec file
-    const uniqueNameForThisSpec = 'dynacastHomePage';  
+    const uniqueNameForThisSpec = 'homePage';  
   
     const thresholds = {
       performance: 10,
@@ -40,7 +40,7 @@ it("generates Lighthouse HTML report for Dynacast", function () {
       //output: "html",
     };
     
-    cy.visit('https://www.dynacast.com/');
+    cy.visit('https://rahulshettyacademy.com/seleniumPractise/#/');
     cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig).then(() => {
       // Use cy.task to invoke the 'findReportFile' task with the unique name
       cy.task('findReportFile', { reportsDir, pageName: uniqueNameForThisSpec }).then((filePath) => {
