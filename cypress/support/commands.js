@@ -24,6 +24,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+import 'cypress-iframe';
+
 Cypress.Commands.add('searchProduct', (productName) => {
   cy.get('.search-keyword').type(productName);
   cy.wait(2000);

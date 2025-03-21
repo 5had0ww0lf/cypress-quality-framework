@@ -15,3 +15,14 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+
+// cypress/support/{scheme}.js, where {scheme} defaults to e2e
+const compareSnapshotCommand = require('cypress-image-diff-js/dist/command');   //v1
+//const compareSnapshotCommand = require('cypress-image-diff-js/command');      //v2
+compareSnapshotCommand();
+
+// Generate default HTML report
+// https://cypress.visual-image-diff.dev/getting-started/reporting#generate-default-html-report
+after(() => {
+    cy.task('generateReport')
+  })

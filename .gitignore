@@ -3,6 +3,8 @@ cypress/screenshots/
 cypress/videos/
 cypress/reports/
 cypress/downloads/
+cypress-visual-report/
+cypress-visual-screenshots/
 
 # Node modules
 node_modules/
