@@ -1,0 +1,30 @@
+name: Cypress tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  e2e:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress tests
+        run: npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js" --reporter junit --reporter-options mochaFile=results/junit.[hash].xml
+
+      - name: Upload JUnit report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-junit-results
+          path: results/junit.*.xml

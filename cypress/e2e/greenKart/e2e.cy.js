@@ -40,21 +40,37 @@ describe('GreenKart', () => {
     GreenKartPage.getTotalAmount().should('not.be.empty');
   });
 
+  it('should intercept at least one network request when visiting the app', function() {
+    cy.intercept('GET', '**/*').as('allRequest');
+
+    GreenKartPage.visit();
+
+    cy.wait('@allRequest').its('response.statusCode').should('be.oneOf', [200, 304]);
+  });
+
+  it('should show no results for an invalid product search', function() {
+    GreenKartPage.visit();
+    GreenKartPage.searchProduct(this.productData.invalidProduct);
+    GreenKartPage.getVisibleProducts().should('have.length', 0);
+    cy.get('.products .product', { timeout: 1000 }).should('not.exist');
+  });
+
   it('should remove a product from the cart', function() {
     GreenKartPage.visit();
     GreenKartPage.searchProduct(this.productData.productName);
     GreenKartPage.addToCart();
     GreenKartPage.openCart();
     GreenKartPage.removeProduct();
-    GreenKartPage.getEmptyCartMessage();
+    GreenKartPage.getEmptyCartMessage().should('contain.text', 'cart is empty');
     GreenKartPage.getCartItems().should('have.length', 0);
   });
 
-  it.only('should buy a product', function() {
+  it('should buy a product', function() {
     GreenKartPage.visit();
     GreenKartPage.searchProduct(this.productData.productName);
     GreenKartPage.addToCart();
     GreenKartPage.openCart();
+    GreenKartPage.getCartItems().should('have.length.greaterThan', 0);
     GreenKartPage.proceedToCheckout();
     GreenKartPage.placeOrder();
     GreenKartPage.checkoutPage(this.productData.country);

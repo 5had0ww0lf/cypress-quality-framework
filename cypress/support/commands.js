@@ -25,6 +25,6 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('searchProduct', (productName) => {
-  cy.get('.search-keyword').type(productName);
-  cy.wait(2000);
+  cy.get('.search-keyword').clear().type(productName);
+  cy.get('.products .product:visible').should('have.length.greaterThan', 0);
 });

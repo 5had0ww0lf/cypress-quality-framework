@@ -1,5 +1,12 @@
 {
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run --spec \"cypress/e2e/greenKart/e2e.cy.js\"",
+    "lint": "eslint . --ext .js"
+  },
   "devDependencies": {
-    "cypress": "^14.2.0"
+    "cypress": "^14.2.0",
+    "eslint": "^10.1.0",
+    "eslint-plugin-cypress": "^6.2.2"
   }
 }

@@ -22,28 +22,44 @@ Follow these steps to set up the repository after cloning it to your machine:
    ```sh
    git clone <repository-url>
    cd <repository-directory>
+   ```
 
 2. **Install dependencies**
-    ```sh
-    npm install
+
+   ```sh
+   npm install
+   ```
 
 3. **Run Cypress Tests**
-    Open the Cypress Test Runner
-    ```sh
-    npx cypress open
-    ```
-    
-    Or run the tests in headless mode
-    ```sh
-    npx cypress run
-    ```
 
-### Key Files
+   Open the Cypress Test Runner:
 
-- cypress/e2e/greenKart/e2e.cy.js: Contains the test cases for the GreenKart page.
-- cypress/fixtures/product.json: Contains test data for the product.
+   ```sh
+   npx cypress open
+   ```
+
+   Or run the tests in headless mode:
+
+   ```sh
+   npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js"
+   ```
+
+4. **Optional: run a single test**
+
+   ```sh
+   npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js" --browser chrome
+   ```
 - cypress/support/GreenKartPage.js: Page Object Model for the GreenKart page.
 - cypress.config.js: Cypress configuration file.
+
+### Overview
+
+This repo is designed as a polished Cypress portfolio project with:
+
+- Page Object Model (POM) in `cypress/support/GreenKartPage.js`
+- Fixture-driven data in `cypress/fixtures/product.json`
+- Negative and positive flows
+- CI workflow in `.github/workflows/cypress-run.yml`
 
 ### Test Cases
 
@@ -54,6 +70,28 @@ The project includes the following test cases:
 3. **Add a product to the cart**
 4. **Verify the cart is empty initially**
 5. **Verify the total amount in the cart**
-6. **Remove a product from the cart**
-7. **Buy a product**
+6. **Show no results for an invalid product search**
+7. **Remove a product from the cart**
+8. **Buy a product**
+
+### How to run
+
+- `npm install`
+- `npx cypress open` (interactive)
+- `npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js"` (headless)
+- `npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js" --browser chrome`
+
+### CI / reporting
+
+- GitHub Action: `.github/workflows/cypress-run.yml`
+- Add reporter flags in workflow to generate JUnit XML:
+  - `npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js" --reporter junit --reporter-options mochaFile=results/junit.[hash].xml`
+
+### Notes for reviewers
+
+- `cypress.config.js` already has `baseUrl` set to https://rahulshettyacademy.com/seleniumPractise/#/
+- Data-driven scenario uses `cypress/fixtures/product.json` including `invalidProduct`.
+- No explicit `cy.wait` calls; all waits are handled by `.should` assertions.
+- To harden further, add data-cy in web app elements and lint with `eslint-plugin-cypress`.
+
 

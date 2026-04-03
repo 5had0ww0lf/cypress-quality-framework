@@ -8,12 +8,12 @@ class GreenKartPage {
   }
 
   searchProduct(productName) {
-    cy.get('.search-keyword').type(productName);
-    cy.wait(2000);
+    cy.get('.search-keyword').clear().type(productName);
+    cy.get('.products').should('exist');
   }
 
   getVisibleProducts() {
-    return cy.get('.product:visible');
+    return cy.get('.products').find('.product:visible');
   }
 
   addToCart() {
@@ -45,8 +45,7 @@ class GreenKartPage {
   }
 
   getEmptyCartMessage() {
-    cy.get('.empty-cart').find('h2').should('have.text', 'You cart is empty!');
-
+    return cy.get('.empty-cart').find('h2');
   }
 
   checkoutPage(selectCountry) {
@@ -54,7 +53,7 @@ class GreenKartPage {
     cy.get('.chkAgree').click();
     cy.get('.chkAgree').should('be.checked');
     cy.get('button').contains('Proceed').click();
-    cy.get('div.wrapperTwo > span').contains('Thank you, your order has been placed successfully ');
+    cy.get('div.wrapperTwo > span').should('contain.text', 'Thank you, your order has been placed successfully');
   }
 
 }
