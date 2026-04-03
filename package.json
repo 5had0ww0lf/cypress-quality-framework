@@ -2,10 +2,17 @@
   "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run --spec \"cypress/e2e/ui/greenkart.cy.js\"",
+    "visual:run": "node scripts/run-visual-tests.js visual/visual-baseline.cy.js",
+    "visual:baseline": "node scripts/run-visual-tests.js visual/visual-baseline.cy.js --env updateSnapshots=true",
+    "visual:responsive": "node scripts/run-visual-tests.js visual/visual-responsive.cy.js",
+    "visual:all": "node scripts/run-visual-tests.js visual/*.cy.js",
+    "visual:report": "cypress-image-diff-html-report generate",
     "lint": "eslint . --ext .js"
   },
   "devDependencies": {
     "cypress": "^14.2.0",
+    "cypress-image-diff-html-report": "^2.2.0",
+    "cypress-image-diff-js": "^1.32.0",
     "eslint": "^10.1.0",
     "eslint-plugin-cypress": "^6.2.2"
   }

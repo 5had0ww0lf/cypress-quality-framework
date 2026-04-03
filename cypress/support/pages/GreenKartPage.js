@@ -43,11 +43,16 @@ class GreenKartPage {
     return cy.get('.totAmt');
   }
 
+  getCartPreviewItem(productName) {
+    return cy
+      .get('.cart-preview.active .cart-items .cart-item')
+      .contains('.product-name', productName, { matchCase: false })
+      .parents('.cart-item');
+  }
+
   removeProductFromCart(productName) {
-    cy.get('div.cart-preview.active')
-      .contains('.cart-preview-active', productName, { matchCase: false })
-      .parents('.cart-preview-active')
-      .find('a.product-remove')
+    this.getCartPreviewItem(productName)
+      .find('.product-remove')
       .click();
   }
 
