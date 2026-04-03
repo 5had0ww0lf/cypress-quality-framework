@@ -1,54 +1,49 @@
-it("generates Lighthouse HTML report for GreenKart", function () {
+describe('GreenKart Lighthouse integration', () => {
+  const baseUrl = 'https://rahulshettyacademy.com/seleniumPractise/#/';
 
-    // Define the reports directory
-    const reportsDir = 'cypress/reports/';
-  
-    // Unique name to insert for this spec file
-    const uniqueNameForThisSpec = 'homePage';  
-  
-    const thresholds = {
-      performance: 10,
-      accessibility: 10,
-      seo: 10,
-      'first-contentful-paint': 10000, //7000
-      'largest-contentful-paint': 40000, //12000
-      'cumulative-layout-shift': 0.4,
-      'total-blocking-time': 35000,  //3500
-      };
-    
-    const desktopConfig = {
-      formFactor: 'desktop',
-      //screenEmulation: { disabled: true },
-      screenEmulation: {
-        width: 1350,
-        height: 940,
-        deviceScaleRatio: 1,
-        mobile: false,
-        disable: false,
-      },
-    };
-  
-    const lighthouseOptions = {
-      formFactor: 'desktop',
-      screenEmulation: { disabled: true },
-    };
-    
-    const lighthouseConfig = {
-      settings: { output: "html" },
-      extends: "lighthouse:default",
-      //Fix for HTML report
-      //output: "html",
-    };
-    
-    cy.visit('https://rahulshettyacademy.com/seleniumPractise/#/');
-    cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig).then(() => {
-      // Use cy.task to invoke the 'findReportFile' task with the unique name
-      cy.task('findReportFile', { reportsDir, pageName: uniqueNameForThisSpec }).then((filePath) => {
-        if (filePath) {
-          cy.log(`Found report file with unique name: ${filePath}`);
-        } else {
-          cy.log('No report file was found.');
-        }
-      });
+  beforeEach(() => {
+    cy.visit(baseUrl);
+  });
+
+  it('generates lighthouse report for homepage and asserts thresholds', () => {
+    cy.fixture('lighthouseConfig').then((cfg) => {
+      cy.lighthouse(cfg.lighthouse.thresholds, { formFactor: 'desktop', screenEmulation: { disabled: true } }, { extends: 'lighthouse:default', settings: { output: 'html' } })
+        .then((lhr) => {
+          expect(lhr).to.not.be.null;
+          if (lhr && lhr.categories) {
+            expect(lhr.categories.performance.score).to.be.gte(0.85);
+            expect(lhr.categories.accessibility.score).to.be.gte(0.9);
+            expect(lhr.categories['best-practices'].score).to.be.gte(0.85);
+            expect(lhr.categories.seo.score).to.be.gte(0.9);
+
+            cy.log(`Performance: ${lhr.categories.performance.score}`);
+            cy.log(`Accessibility: ${lhr.categories.accessibility.score}`);
+          }
+
+          // Persist the report through task if available
+          if (lhr && lhr.report) {
+            cy.task('writeLighthouseReport', {
+              report: lhr.report,
+              pageName: 'homePage'
+            }).then((filePath) => {
+              cy.log(`Saved Lighthouse report: ${filePath}`);
+            });
+          }
+        });
     });
   });
+
+  it('runs Lighthouse on the same page in mobile emulation', () => {
+    cy.fixture('lighthouseConfig').then((cfg) => {
+      cy.lighthouse(cfg.lighthouse.thresholds, { formFactor: 'mobile', screenEmulation: { disabled: false }}, { extends: 'lighthouse:default', settings: { output: 'html', emulatedFormFactor: 'mobile' }})
+        .then((lhr) => {
+          expect(lhr).to.not.be.null;
+          if (lhr && lhr.categories) {
+            expect(lhr.categories.accessibility.score).to.be.gte(0.9);
+            expect(lhr.categories.seo.score).to.be.gte(0.9);
+            cy.log(`Mobile performance: ${lhr.categories.performance.score}`);
+          }
+        });
+    });
+  });
+});

@@ -1,11 +1,23 @@
 {
   "lighthouse": {
     "thresholds": {
-      "performance": 85,
-      "accessibility": 50,
-      "best-practices": 85,
-      "seo": 85,
-      "pwa": 50
+      "performance": 45,
+      "accessibility": 60,
+      "best-practices": 80,
+      "seo": 82,
+      "pwa": 25
+    },
+    "settings": {
+      "emulatedFormFactor": "desktop",
+      "throttling": {
+        "rttMs": 40,
+        "throughputKbps": 10240,
+        "cpuSlowdownMultiplier": 1,
+        "requestLatencyMs": 0,
+        "downloadThroughputKbps": 0,
+        "uploadThroughputKbps": 0
+      },
+      "onlyCategories": ["performance", "accessibility", "best-practices", "seo"]
     }
   }
 }

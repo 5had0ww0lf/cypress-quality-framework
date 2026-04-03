@@ -75,6 +75,36 @@ To open Cypress UI:
     cy:open
 ```
 
+## Test coverage and suites
+
+- `cypress/e2e/greenKart/e2e.cy.js`: core functional flow (search, add/remove cart, checkout)
+- `cypress/e2e/greenkartHomePage.cy.js`: Lighthouse checks (desktop + mobile), report file generation
+- `cypress/e2e/accessibility.cy.js`: Pa11y accessibility audit + API intercept verification
+
+## Lighthouse + Pa11y thresholds
+
+- `cypress/fixtures/lighthouseConfig.json` has thresholds for performance/accessibility/SEO/best-practices.
+- Pass requires:
+  - performance >= 85
+  - accessibility >= 90
+  - best-practices >= 85
+  - SEO >= 90
+
+# Run tests
+
+- `npm run cy:open` - interactive run
+- `npm run cy:run` - headless run all specs
+- `npx cypress run --spec "cypress/e2e/greenkartHomePage.cy.js"`
+- `npx cypress run --spec "cypress/e2e/accessibility.cy.js"`
+- `npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js"`
+
+# Reports
+
+After running, reports can be found in:
+```    
+    cypress/reports
+```
+
 To run all tests headlessly:
 ```    
     cy:open

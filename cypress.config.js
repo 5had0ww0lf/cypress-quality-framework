@@ -15,8 +15,8 @@ const timeWithSeconds = now.toTimeString().split(' ')[0].replace(/:/g, '-');    
 module.exports = {
   e2e: {
     //baseUrl: "https://www.arke.com",
-    setupNodeEvents(on, config) {
-      on("before:browser:launch", (browser = {}, launchOptions) => {
+    setupNodeEvents(on) {
+      on("before:browser:launch", (_, launchOptions) => {
         prepareAudit(launchOptions);
       })
 
@@ -29,51 +29,52 @@ module.exports = {
         lighthouse: lighthouse((lighthouseReport) => {
           console.log("---- Writing lighthouse report to disk ----");
 
-          //Creating a filename with date and time
-          const fileName = `cypress/reports/lighthouse-${clientName}-${date}-T${timeWithSeconds}.html`;   //YYYY-MM-DD HH-mm-ss
-          
-          // Writing the file
-          fs.writeFile(fileName, lighthouseReport.report, (error) => {
-            if (error) {
-              console.log("Error writing report:", error);
-            } else {
-              console.log("Report created successfully");
-            }
-          });
+          // Ensure report folder exists
+          const reportsDir = path.join(__dirname, 'cypress', 'reports');
+          if (!fs.existsSync(reportsDir)) {
+            fs.mkdirSync(reportsDir, { recursive: true });
+          }
+
+          // Create a filename with date + optional pageName from report meta
+          const pageName = (lighthouseReport && lighthouseReport.pageName) ? `${lighthouseReport.pageName}-` : '';
+          const fileName = path.join(reportsDir, `lighthouse-${clientName}-${pageName}${date}-T${timeWithSeconds}.html`);
+
+          fs.writeFileSync(fileName, lighthouseReport.report);
+          console.log(`Report created successfully: ${fileName}`);
+
+          return fileName;
         }),
 
-        findReportFile({ reportsDir, pageName }) {
-          // Read the directory contents
-          const files = fs.readdirSync(reportsDir);
-      
-          // Filter out the report files based on a pattern
-          const reportFiles = files.filter(file => file.startsWith('lighthouse-') && file.endsWith('.html'));
+        writeLighthouseReport({ report, pageName }) {
+          const reportsDir = path.join(__dirname, 'cypress', 'reports');
+          if (!fs.existsSync(reportsDir)) {
+            fs.mkdirSync(reportsDir, { recursive: true });
+          }
+          const fileName = path.join(reportsDir, `lighthouse-${clientName}-${pageName}-${date}-T${timeWithSeconds}.html`);
+          fs.writeFileSync(fileName, report);
+          return fileName;
+        },
 
-          // Sort the report files by creation time in descending order
+        findReportFile({ reportsDir, pageName }) {
+          const files = fs.readdirSync(reportsDir);
+          const reportFiles = files.filter(file => file.startsWith('lighthouse-') && file.endsWith('.html'));
           reportFiles.sort((a, b) => {
-          const aStats = fs.statSync(path.join(reportsDir, a));
-          const bStats = fs.statSync(path.join(reportsDir, b));
-          return bStats.mtimeMs - aStats.mtimeMs;
+            const aStats = fs.statSync(path.join(reportsDir, a));
+            const bStats = fs.statSync(path.join(reportsDir, b));
+            return bStats.mtimeMs - aStats.mtimeMs;
           });
-      
-          // If a report file is found, return the full path
+
           if (reportFiles.length > 0) {
-            const latestReportFile = reportFiles[0]; // Get the most recent report file
+            const latestReportFile = reportFiles[0];
             const originalPath = path.join(reportsDir, latestReportFile);
-      
-            // Construct the new file path with the new name inserted
             const newPath = originalPath.replace(`${date}-`, `${date}-${pageName}-`);
-      
-            // Rename the file on the disk
             fs.renameSync(originalPath, newPath);
-      
-            // Return the new file path
             return newPath;
           }
-      
-          // If no files are found, return null
+
           return null;
         },
+
 
       })
     }
