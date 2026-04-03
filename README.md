@@ -71,8 +71,9 @@ The project includes the following test cases:
 4. **Verify the cart is empty initially**
 5. **Verify the total amount in the cart**
 6. **Show no results for an invalid product search**
-7. **Remove a product from the cart**
-8. **Buy a product**
+7. **Intercept network request and assert mocked backend response**
+8. **Remove a product from the cart**
+9. **Buy a product**
 
 ### How to run
 
