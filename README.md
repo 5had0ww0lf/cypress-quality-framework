@@ -74,6 +74,7 @@ Settings in `cypress-image-diff.config.js`:
 - `ROOT_DIR`: 'cypress-image-diff'
 - `REPORT_DIR`: 'visual-reports'
 - `SCREENSHOTS_DIR`: 'visual-screenshots'
+- `FAILURE_THRESHOLD`: 0.1 (10% difference tolerance for demo site)
 
 ### Viewport Settings
 - Width: 1280px
@@ -179,12 +180,3 @@ cypress/
 3. Generate baselines for new tests
 4. Ensure tests pass in CI
 5. Submit a pull request
-```
-
-```
-npm i cypress-image-diff-html-report@^2.1.2 --save-dev
-```
-
-Plugin needed to allow Cypress to work with iframes
-```
-npm install cypress-iframe@^1.0.1 --save-dev
