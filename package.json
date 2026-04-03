@@ -2,8 +2,10 @@
   "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "visual:run": "cypress run --spec 'cypress/e2e/visualRegression-greenKart.cy.js'",
-    "visual:baseline": "cypress run --spec 'cypress/e2e/visualRegression-greenKart.cy.js' --env updateSnapshots=true",
+    "visual:run": "cypress run --spec 'cypress/e2e/visual-baseline.cy.js'",
+    "visual:baseline": "cypress run --spec 'cypress/e2e/visual-baseline.cy.js' --env updateSnapshots=true",
+    "visual:responsive": "cypress run --spec 'cypress/e2e/visual-responsive.cy.js'",
+    "visual:all": "cypress run --spec 'cypress/e2e/visual-*.cy.js'",
     "lint": "eslint . --ext .js"
   },
   "devDependencies": {

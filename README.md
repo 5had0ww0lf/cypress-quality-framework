@@ -96,6 +96,16 @@ npm run cy:open
 npm run visual:run
 ```
 
+### Run Responsive & Advanced Tests
+```bash
+npm run visual:responsive
+```
+
+### Run All Visual Tests
+```bash
+npm run visual:all
+```
+
 ### Generate/Update Baselines
 ```bash
 npm run visual:baseline
@@ -104,7 +114,8 @@ npm run visual:baseline
 
 ### Run Specific Tests
 ```bash
-npx cypress run --spec "cypress/e2e/visualRegression-greenKart.cy.js"
+npx cypress run --spec "cypress/e2e/visual-baseline.cy.js"
+npx cypress run --spec "cypress/e2e/visual-responsive.cy.js"
 ```
 
 ## Baseline Management
@@ -156,7 +167,7 @@ The branch includes comprehensive responsive viewport testing:
 
 ### Running Responsive Tests
 ```bash
-npx cypress run --spec "cypress/e2e/visualRegression-advanced.cy.js"
+npx cypress run --spec "cypress/e2e/visual-responsive.cy.js"
 ```
 
 This runs 9 responsive tests (3 breakpoints × 3 scenarios) plus 5 advanced interaction tests.
@@ -234,7 +245,7 @@ npm run visual:baseline  # Update baselines if needed
 
 ## Test Coverage
 
-### Visual Regression Tests (6 core tests)
+### Baseline Tests (visual-baseline.cy.js - 6 tests)
 - Homepage with full content
 - Search results page
 - Empty search results
@@ -242,16 +253,10 @@ npm run visual:baseline  # Update baselines if needed
 - Empty cart
 - Checkout page
 
-### Responsive Tests (9 tests)
+### Responsive & Advanced Tests (visual-responsive.cy.js - 14 tests)
 - 3 viewport breakpoints (desktop, tablet, mobile)
-- 3 scenarios per breakpoint (homepage, search, cart)
-
-### Advanced Scenario Tests (5 tests)
-- Error state (invalid search)
-- Product hover state
-- Add to cart button visibility
-- Cart item details
-- Checkout button visibility
+- 3 scenarios per breakpoint (homepage, search, cart) = 9 responsive tests
+- 5 advanced scenarios (error states, hover, button visibility) = 5 advanced tests
 
 **Total: 20 Visual Regression Tests**
 
@@ -282,26 +287,26 @@ cy.compareSnapshot('homepage', {
 ```
 cypress/
 ├── e2e/
-│   ├── visualRegression-greenKart.cy.js      # 6 baseline visual tests
-│   └── visualRegression-advanced.cy.js       # 14 responsive + advanced tests
+│   ├── visual-baseline.cy.js          # 6 baseline visual tests
+│   └── visual-responsive.cy.js        # 14 responsive + advanced tests
 ├── fixtures/
-│   └── product.json                          # Test data
+│   └── product.json                   # Test data
 ├── support/
-│   ├── GreenKartPage.js                      # Page Object Model
-│   └── commands.js                           # Custom commands
+│   ├── GreenKartPage.js               # Page Object Model
+│   └── commands.js                    # Custom commands
 
 cypress-image-diff/
-├── cypress-visual-report.html                # Main HTML report
-├── cypress-visual-report/                    # Timestamped JSON reports
+├── cypress-visual-report.html         # Main HTML report
+├── cypress-visual-report/             # Timestamped JSON reports
 └── cypress-visual-screenshots/
-    └── baseline/                             # Reference images (tracked)
+    └── baseline/                      # Reference images (tracked)
 
 .github/workflows/
-└── visual-regression.yml                     # GitHub Actions CI/CD
+└── visual-regression.yml              # GitHub Actions CI/CD
 
-.eslintrc.json                                # Cypress linting rules
-cypress.config.js                             # Cypress configuration
-cypress-image-diff.config.js                  # Visual regression config
+.eslintrc.json                         # Cypress linting rules
+cypress.config.js                      # Cypress configuration
+cypress-image-diff.config.js           # Visual regression config
 ```
 
 ## Contributing
