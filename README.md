@@ -1,116 +1,119 @@
-# Introduction 
-This project has the goal to run test and generate comprehensive and detailed lighthouse and pa11y reports. Lighthouse is a tool for improving the performance, quality, and correctness of your web apps. Pa11y runs accessibility tests on your pages.
+# Cypress Lighthouse Integration Project
 
-# Getting Started
+This project demonstrates advanced Cypress testing capabilities with integrated performance auditing using Lighthouse and accessibility testing with Pa11y. It showcases automated quality assurance for web applications, generating detailed reports for performance metrics, accessibility compliance, and best practices.
 
-To be able to run tests and generate lighthouse reports, you'll need to do the following:
+## Features
 
-**1. Clone the repo in your local machine**
+- **End-to-End Testing**: Functional tests for e-commerce flows (search, cart, checkout)
+- **Performance Auditing**: Lighthouse reports for desktop and mobile with configurable thresholds
+- **Accessibility Testing**: Pa11y audits for WCAG compliance and automated violation detection
+- **API Interception**: Network request validation and monitoring
+- **Page Object Model**: Maintainable test architecture
+- **Code Quality**: ESLint integration with Cypress-specific linting rules
+- **Automated Reporting**: HTML reports generation for audits
 
-**2. Install Cypress:**
+## Getting Started
 
-To install Cypress, follow this guide: https://docs.cypress.io/guides/getting-started/installing-cypress
+### Prerequisites
 
-```    
-    $ yarn add cypress --dev
-    # or
-    $ npm install cypress --save-dev
+- Node.js (v14 or higher)
+- Chrome browser (required for Lighthouse/Pa11y plugins)
+
+### Installation
+
+1. **Clone the repository and checkout this branch:**
+   ```bash
+   git clone <repository-url>
+   cd cypress-portfolio
+   git checkout lighthouse-integration
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+   This installs Cypress, Lighthouse plugin, Pa11y plugin, and ESLint.
+
+## Test Suites
+
+### Core E2E Tests (`cypress/e2e/greenKart/e2e.cy.js`)
+- Homepage navigation and title verification
+- Product search functionality (valid/invalid searches)
+- Cart operations (add, remove, totals)
+- Complete purchase workflow
+- Network request interception
+
+### Performance Tests (`cypress/e2e/greenkartHomePage.cy.js`)
+- Lighthouse desktop performance audit
+- Lighthouse mobile performance audit
+- Automated HTML report generation
+
+### Accessibility Tests (`cypress/e2e/accessibility.cy.js`)
+- Pa11y accessibility compliance audit
+- API request interception validation
+
+## Configuration
+
+### Lighthouse Thresholds
+Configured for realistic demo site performance in `cypress/fixtures/lighthouseConfig.json`:
+- Performance: ≥30
+- Accessibility: ≥60
+- Best Practices: ≥70
+- SEO: ≥82
+- PWA: ≥25
+
+### Browser Requirements
+Chrome browser is mandatory due to Lighthouse/Pa11y plugin dependencies.
+
+## Running Tests
+
+### Interactive Mode
+```bash
+npm run cy:open
 ```
 
-**3. Install Lighthouse plugin:**
-
-To install Lighthouse, after installing Cypress, run this code in the terminal:
-
-```    
-    $ yarn add -D @cypress-audit/lighthouse
-    # or
-    $ npm install --save-dev @cypress-audit/lighthouse
+### Headless Mode (All Tests)
+```bash
+npm run cy:run
 ```
 
-**4. Install Pa11y plugin:**
-
-To install Pa11y, after installing Cypress and Lighthouse, run this code in the terminal:
-
-```    
-    $ yarn add -D @cypress-audit/pa11y
-    # or
-    $ npm install --save-dev @cypress-audit/pa11y
+### Individual Test Suites
+```bash
+npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js"
+npx cypress run --spec "cypress/e2e/greenkartHomePage.cy.js"
+npx cypress run --spec "cypress/e2e/accessibility.cy.js"
 ```
 
-# Build and Test
-
-If you wanna run Cypress and view the test being executed, you can run the following:
-
-```    
-    $ npx cypress open
-```
-After that, select E2E testing and the test that you wanna run.
-
-But you can run these tests in the headless mode:
-
-```    
-    $ npx cypress run
+### Code Linting
+```bash
+npm run lint
 ```
 
-To run a specific test, type the following:
+## Reports
 
-```    
-    $ npx cypress run --spec cypress/e2e/lighthouse-html-report.cy.js
+Audit reports are automatically generated in `cypress/reports/`:
+- Lighthouse performance reports (HTML)
+- Accessibility audit results
+
+## Project Structure
+
+```
+cypress/
+├── e2e/
+│   ├── greenKart/e2e.cy.js          # Core E2E tests
+│   ├── greenkartHomePage.cy.js      # Performance audits
+│   └── accessibility.cy.js          # Accessibility tests
+├── fixtures/
+│   ├── product.json                 # Test data
+│   └── lighthouseConfig.json        # Audit configuration
+├── support/
+│   ├── commands.js                  # Custom commands
+│   ├── GreenKartPage.js             # Page Object Model
+│   └── e2e.js                       # Global setup
+└── config.js                        # Cypress configuration
 ```
 
-# Reports
+## Usage
 
-After running, reports can be found in 
-
-```    
-    cypress/reports
-```
-
-# NPM Scripts
-
-Instead of using terminal, scripts were added for reuse. To enable it, you may need to right click on Explorer and check "NPM Scripts".
-
-To open Cypress UI:
-```    
-    cy:open
-```
-
-## Test coverage and suites
-
-- `cypress/e2e/greenKart/e2e.cy.js`: core functional flow (search, add/remove cart, checkout)
-- `cypress/e2e/greenkartHomePage.cy.js`: Lighthouse checks (desktop + mobile), report file generation
-- `cypress/e2e/accessibility.cy.js`: Pa11y accessibility audit + API intercept verification
-
-## Lighthouse + Pa11y thresholds
-
-- `cypress/fixtures/lighthouseConfig.json` has thresholds for performance/accessibility/SEO/best-practices.
-- Pass requires:
-  - performance >= 85
-  - accessibility >= 90
-  - best-practices >= 85
-  - SEO >= 90
-
-# Run tests
-
-- `npm run cy:open` - interactive run
-- `npm run cy:run` - headless run all specs
-- `npx cypress run --spec "cypress/e2e/greenkartHomePage.cy.js"`
-- `npx cypress run --spec "cypress/e2e/accessibility.cy.js"`
-- `npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js"`
-
-# Reports
-
-After running, reports can be found in:
-```    
-    cypress/reports
-```
-
-To run all tests headlessly:
-```    
-    cy:open
-```
-
-To run one single test headlessly and in Chrome (other browsers may not not supported):
-```    
-    cy:run:lighthouse-html
-```
+This branch demonstrates advanced Cypress testing with performance and accessibility integration. Run `npm run cy:run` to execute the full test suite and generate comprehensive audit reports.
