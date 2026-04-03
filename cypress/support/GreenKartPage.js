@@ -10,8 +10,10 @@ class GreenKartPage {
   searchProduct(productName) {
     cy.get('.search-keyword').clear();
     cy.get('.search-keyword').type(productName);
-    // Wait for either products to load or search to complete
+    // Wait for products container to exist and stabilize (up to 5 seconds)
     cy.get('.products', { timeout: 5000 }).should('exist');
+    // Small wait to allow animations/content to settle
+    cy.get('.products').invoke('text').should('exist');
   }
 
   getVisibleProducts() {
