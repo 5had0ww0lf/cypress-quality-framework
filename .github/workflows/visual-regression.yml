@@ -38,7 +38,7 @@ jobs:
       with:
         name: visual-regression-reports-${{ matrix.node-version }}
         path: |
-          cypress-image-diff/cypress-visual-report/
+          cypress-image-diff-html-report/
           cypress/screenshots/
         retention-days: 30
     

@@ -5,9 +5,12 @@
     "visual:run": "node scripts/run-visual-tests.js visual-baseline.cy.js",
     "visual:baseline": "node scripts/run-visual-tests.js visual-baseline.cy.js --env updateSnapshots=true",
     "visual:responsive": "node scripts/run-visual-tests.js visual-responsive.cy.js",
-    "visual:all": "node scripts/run-visual-tests.js 'visual-*.cy.js'",
+    "visual:all": "node scripts/run-visual-tests.js visual-*.cy.js",
     "visual:report": "cypress-image-diff-html-report generate",
     "lint": "eslint . --ext .js"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "devDependencies": {
     "cypress": "^14.2.0",

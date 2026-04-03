@@ -2,10 +2,9 @@
 
 const { execSync } = require('child_process');
 const {
-  archiveGeneratedHtmlReport,
+  hasJsonReportOutput,
   cleanupJsonReports,
-  ensureReportDir,
-  removeTemporaryHtmlReport
+  ensureReportDir
 } = require('./report-utils');
 
 // Get the spec file and any additional arguments
@@ -38,28 +37,16 @@ try {
 }
 
 console.log('Generating HTML report...');
-try {
-  ensureReportDir();
-  removeTemporaryHtmlReport();
-
-  execSync('npm run visual:report', { stdio: 'inherit' });
-} catch (error) {
-  reportGenerationFailed = true;
-  console.error('Error generating report:', error.message);
-}
-
-console.log('Creating timestamped report archive...');
-try {
-  const archivedReport = archiveGeneratedHtmlReport();
-
-  if (archivedReport) {
-    console.log(`Timestamped report created: ${archivedReport}`);
-  } else if (reportGenerationFailed) {
-    console.error('No HTML report was generated, so nothing was archived.');
+if (hasJsonReportOutput()) {
+  try {
+    ensureReportDir();
+    execSync('npm run visual:report', { stdio: 'inherit' });
+  } catch (error) {
+    reportGenerationFailed = true;
+    console.error('Error generating report:', error.message);
   }
-} catch (error) {
-  console.error('Error creating timestamped report:', error.message);
-  reportGenerationFailed = true;
+} else {
+  console.log('Skipping HTML report generation because no JSON report output was created.');
 }
 
 console.log('\nCleaning up JSON reports...');

@@ -3,10 +3,6 @@ class GreenKartPage {
     cy.visit('/');
   }
 
-  getTitle() {
-    return cy.title();
-  }
-
   searchProduct(productName) {
     cy.get('.search-keyword').clear();
     cy.get('.search-keyword').type(productName);
@@ -29,35 +25,6 @@ class GreenKartPage {
   proceedToCheckout() {
     cy.contains('PROCEED TO CHECKOUT').click();
   }
-
-  placeOrder() {
-    cy.contains('Place Order').click();
-  }
-
-  getCartItems() {
-    return cy.get('.cart-items');
-  }
-
-  getTotalAmount() {
-    return cy.get('.totAmt');
-  }
-
-  removeProduct() {
-    cy.get('div.cart-preview.active').find('a.product-remove').click();
-  }
-
-  getEmptyCartMessage() {
-    cy.get('.empty-cart').find('h2').should('have.text', 'You cart is empty!');
-  }
-
-  checkoutPage(selectCountry) {
-    cy.get('select').select(selectCountry);
-    cy.get('.chkAgree').click();
-    cy.get('.chkAgree').should('be.checked');
-    cy.get('button').contains('Proceed').click();
-    cy.get('div.wrapperTwo > span').contains('Thank you, your order has been placed successfully ');
-  }
-
 }
 
 module.exports = new GreenKartPage();
