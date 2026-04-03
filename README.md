@@ -1,358 +1,163 @@
-# Cypress Visual Regression Testing
+# Cypress Visual Regression Testing Portfolio
 
-This project demonstrates visual regression testing for the GreenKart e-commerce website using Cypress and the `cypress-image-diff-js` plugin. Visual regression testing compares screenshots of web pages against baseline images to detect unintended visual changes.
+This project showcases a visual regression testing workflow for the GreenKart demo storefront using Cypress, `cypress-image-diff-js`, and automated HTML report generation. The goal is to demonstrate how I structure UI regression coverage, maintain visual baselines, and surface results clearly in local runs and CI.
 
-## Features
+## Why This Project Stands Out
 
-- **Pixel-Perfect Comparisons**: Detect visual differences down to individual pixels
-- **Baseline Management**: Create and update reference screenshots
-- **HTML Reports**: Detailed visual diff reports with highlighted changes
-- **Responsive Testing**: Multiple viewport breakpoints (desktop, tablet, mobile)
-- **Code Quality**: ESLint integration with Cypress best practices
-- **CI/CD Integration**: GitHub Actions workflow with automated testing
-- **Advanced Scenarios**: Hover states, error states, and interaction testing
+- Visual baseline coverage for core ecommerce flows
+- Responsive regression coverage across desktop, tablet, and mobile
+- Timestamped HTML reports generated automatically after each run
+- CI pipeline that lints, runs visual checks, and uploads artifacts for review
+- Maintainable support code with reusable page-object interactions and shared snapshot helpers
+
+## Tech Stack
+
+- Cypress 14
+- `cypress-image-diff-js`
+- `cypress-image-diff-html-report`
+- GitHub Actions
+- ESLint
+
+## Application Under Test
+
+- URL: `https://rahulshettyacademy.com/seleniumPractise/#/`
+- Domain: ecommerce product search and checkout flow
+- Focus: visual stability across key user journeys rather than broad functional coverage
+
+## Test Coverage
+
+### Baseline Suite
+
+`cypress/e2e/visual-baseline.cy.js` covers:
+
+- Homepage layout
+- Search results state
+- Empty search state
+- Cart with items
+- Empty cart
+- Checkout page
+
+### Responsive and Advanced Suite
+
+`cypress/e2e/visual-responsive.cy.js` covers:
+
+- Desktop, tablet, and mobile viewports
+- Homepage, search, and cart layouts per viewport
+- Empty-result state
+- Hover state
+- Add-to-cart call-to-action visibility
+- Cart detail view
+- Checkout call-to-action visibility
+
+## Project Structure
+
+```text
+cypress/
+|-- e2e/
+|   |-- visual-baseline.cy.js
+|   `-- visual-responsive.cy.js
+|-- fixtures/
+|   `-- product.json
+`-- support/
+    |-- GreenKartPage.js
+    |-- e2e.js
+    `-- visual-helpers.js
+
+cypress-image-diff/
+|-- cypress-visual-report/
+|   `-- cypress-visual-report_YYYY-MM-DD-THH-mm-ss.html
+`-- cypress-visual-screenshots/
+    `-- baseline/
+
+scripts/
+|-- report-utils.js
+`-- run-visual-tests.js
+
+.github/workflows/
+`-- visual-regression.yml
+```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- Chrome browser (recommended for consistent rendering)
+- Node.js 18 or newer
+- npm
 
-### Installation
+### Install
 
-1. **Clone the repository and checkout this branch:**
-   ```bash
-   git clone <repository-url>
-   cd cypress-visual-regression
-   git checkout visual-regression
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-   This installs:
-   - Cypress 14.2.0
-   - cypress-image-diff-js (visual comparison)
-   - cypress-image-diff-html-report (HTML reporting)
-   - cypress-iframe (cross-domain support)
-   - ESLint with Cypress plugin
-
-## Visual Test Suites
-
-### Homepage Tests
-- Initial page load and layout
-- Product grid display
-- Navigation elements
-
-### Search Functionality
-- Search results page
-- Empty search results
-- Search input styling
-
-### Cart Operations
-- Empty cart state
-- Cart with items
-- Cart totals and checkout button
-
-### Checkout Process
-- Checkout form layout
-- Form validation states
-
-## Configuration
-
-### Plugin Setup
-The visual regression plugin is configured in `cypress.config.js`:
-```javascript
-const getCompareSnapshotsPlugin = require('cypress-image-diff-js/dist/plugin');
-setupNodeEvents(on, config) {
-  return getCompareSnapshotsPlugin(on, config);
-}
+```bash
+npm install
 ```
 
-### Custom Configuration
-Settings in `cypress-image-diff.config.js`:
-- `ROOT_DIR`: 'cypress-image-diff'
-- `REPORT_DIR`: 'visual-reports'
-- `SCREENSHOTS_DIR`: 'visual-screenshots'
-- `FAILURE_THRESHOLD`: 0.25 (25% difference tolerance for demo site with dynamic content)
+### Run Commands
 
-### Viewport Settings
-- Width: 1280px
-- Height: 720px
-- Configured for consistent cross-browser testing
-
-## Running Tests
-
-### Interactive Mode
 ```bash
-npm run cy:open
-```
-
-### Run All Visual Tests
-```bash
+# Run the baseline suite
 npm run visual:run
-```
 
-### Run Responsive & Advanced Tests
-```bash
-npm run visual:responsive
-```
-
-### Run All Visual Tests
-```bash
-npm run visual:all
-```
-
-### Generate/Update Baselines
-```bash
+# Refresh baseline images intentionally
 npm run visual:baseline
-```
-*Use this when intentionally updating the UI to create new baseline images*
 
-### Run Specific Tests
-```bash
-npx cypress run --spec "cypress/e2e/visual-baseline.cy.js"
-npx cypress run --spec "cypress/e2e/visual-responsive.cy.js"
-```
+# Run responsive and advanced scenarios
+npm run visual:responsive
 
-## Baseline Management
+# Run all matching visual specs
+npm run visual:all
 
-### Creating Baselines
-1. Run `npm run visual:baseline` after UI changes
-2. Review generated images in `cypress-image-diff/visual-screenshots/`
-3. Commit baseline images to version control
-
-### Handling Changes
-- **Intended Changes**: Update baselines with `visual:baseline`
-- **Unexpected Changes**: Investigate and fix the root cause
-- **False Positives**: Adjust thresholds or exclude dynamic content
-
-## Reports
-
-### Automated HTML Report Generation
-
-Visual diff reports are **automatically generated** in `cypress-image-diff/cypress-visual-report/`:
-
-#### Report File: `cypress-visual-report.html`
-- **Updated automatically** after each test run
-- Side-by-side baseline and comparison images
-- Highlighted differences with pixel counts
-- Thumbnail navigation for quick review
-- Interactive report viewer (light/dark theme support)
-- Detailed statistics and metadata
-
-#### Report Workflow
-When you run any visual test command (`npm run visual:run`, etc.):
-1. ✅ Tests execute against baseline images
-2. ✅ JSON report is generated from test results
-3. ✅ HTML report is created from JSON data
-4. ✅ Old JSON files are automatically cleaned up
-
-**Result**: Only `cypress-visual-report.html` remains in the report directory after each run.
-
-#### Accessing Reports
-```bash
-# Open the HTML report in your browser
-open cypress-image-diff/cypress-visual-report/cypress-visual-report.html
-
-# Or use the file directly (Chrome/Firefox/Safari)
+# Lint the project
+npm run lint
 ```
 
-#### Report Contents
-- Test execution summary
-- Pass/fail status per test
-- Visual diff images with annotations
-- Timestamp and environment metadata
-- Difference percentage and pixel counts
+## Reporting Workflow
 
-## Best Practices
+Each visual test execution follows this sequence:
 
-### Test Stability
-- Use consistent viewport sizes
-- Wait for dynamic content to load
-- Avoid testing timestamps or random content
-- Use data-cy attributes for reliable element selection
+1. Cypress runs the requested visual spec
+2. JSON result data is generated by the visual diff plugin
+3. An HTML report is created in `cypress-image-diff/cypress-visual-report/`
+4. The report is renamed with a timestamp using `YYYY-MM-DD-THH-mm-ss`
+5. Intermediate JSON files are removed automatically
 
-### Performance
-- Run visual tests in headless mode for CI
-- Limit screenshot frequency to key interactions
-- Use appropriate thresholds to reduce false positives
+Example report filename:
 
-### CI/CD Integration
-- Commit baseline images to repository
-- Run visual tests on pull requests
-- Set up notifications for visual regressions
-- Use parallel execution for faster feedback
-
-## Responsive Design Testing
-
-The branch includes comprehensive responsive viewport testing:
-
-### Viewport Breakpoints
-- Desktop: 1280x720
-- Tablet: 1024x768
-- Mobile: 375x667
-
-### Running Responsive Tests
-```bash
-npx cypress run --spec "cypress/e2e/visual-responsive.cy.js"
+```text
+cypress-visual-report_2026-04-03-T16-05-33.html
 ```
 
-This runs 9 responsive tests (3 breakpoints × 3 scenarios) plus 5 advanced interaction tests.
-## Performance Optimization
+The report includes:
 
-### Headless Chrome Optimization
-- Tests run in headless mode for faster execution
-- Parallel execution possible across multiple node versions
-- Baseline image caching for repeated runs
+- Pass/fail totals
+- Per-snapshot comparisons
+- Baseline, comparison, and diff image references
+- Browser and execution metadata
 
-### Execution Strategy
-- Run visual tests in headless mode for CI
-- Use Electron or Chrome for consistency
-- Screenshot throttling and network simulation available
+## Baseline Strategy
 
-### Optimization Tips
-```bash
-# Run tests in parallel (useful for large test suites)
-npm run cy:run -- --parallel
+Baseline images are committed for the current test naming scheme only. Comparison, diff, and HTML report outputs are treated as generated artifacts. The current failure threshold is `0.25`, which is intentionally tolerant because the demo site can introduce timing-related visual variance.
 
-# Run with specific browser optimization
-npm run visual:run -- --browser chrome:headless
-```
+For a production system, I would normally pair this with tighter thresholds plus stronger control over dynamic content, fonts, and network timing.
 
-## Reporting and Metrics
+## Continuous Integration
 
-### HTML Visual Diff Reports
-Located in `cypress-image-diff/cypress-visual-report/cypress-visual-report.html`:
-- **Always HTML format**, automatically generated after each test run
-- Side-by-side baseline and comparison images  
-- Pixel difference highlighting with red overlay
-- Difference percentage calculation
-- Thumbnail navigation for quick review
-- Responsive design, works on desktop and mobile
+`.github/workflows/visual-regression.yml` runs:
 
-### Report Contents
-- Test execution summary with pass/fail statistics
-- Per-test visual comparison with annotations
-- Timestamp and environment metadata
-- Browser and viewport information
-- Execution duration
+- `npm ci`
+- `npm run lint`
+- `npm run visual:run`
+- artifact uploads for reports and baseline snapshots
+- a pull request comment summarizing the workflow result
 
-### JSON Intermediate Files
-- Automatically created during test runs
-- Used to generate the HTML report
-- **Automatically deleted** after HTML generation
-- No manual cleanup required
+## Design Decisions
 
-### Baseline Management
-- Baselines tracked in Git for version control
-- Located in: `cypress/support/compare_images/` (if exists)
-- Diff and comparison folders excluded from Git
-- Easy rollback to previous versions via Git history
+- A page object keeps repeated UI interactions readable
+- A shared snapshot helper prepares the page for more stable full-page captures
+- Report orchestration is handled in small Node scripts rather than long npm shell chains
+- Timestamped reports preserve execution history without overwriting the previous run
 
-## CI/CD Integration
+## What I Would Improve Next
 
-### GitHub Actions Workflow
-The `.github/workflows/visual-regression.yml` provides:
-- Automated testing on push and pull requests
-- Multi-node version testing (18.x, 20.x)
-- ESLint code quality checks
-- Report artifact uploads for 30-day retention
-- PR comments with result summaries
-
-### Running in CI
-```yaml
-- Run ESLint for code quality
-- Execute visual regression tests
-- Upload HTML reports and baseline snapshots
-- Comment on PRs with results
-```
-
-### Local Validation
-Before pushing:
-```bash
-npm run lint          # Validate code
-npm run visual:run    # Run tests locally
-npm run visual:baseline  # Update baselines if needed
-```
-
-## Test Coverage
-
-### Baseline Tests (visual-baseline.cy.js - 6 tests)
-- Homepage with full content
-- Search results page
-- Empty search results
-- Cart with items
-- Empty cart
-- Checkout page
-
-### Responsive & Advanced Tests (visual-responsive.cy.js - 14 tests)
-- 3 viewport breakpoints (desktop, tablet, mobile)
-- 3 scenarios per breakpoint (homepage, search, cart) = 9 responsive tests
-- 5 advanced scenarios (error states, hover, button visibility) = 5 advanced tests
-
-**Total: 20 Visual Regression Tests**
-
-### Current Status
-- ✅ 5/6 core tests passing
-- ⚠️ Homepage test has dynamic content variance (27% difference)
-- ✅ All code passes ESLint validation
-- ✅ CI/CD ready with GitHub Actions
-
-## Troubleshooting
-
-### Common Issues
-- **Inconsistent Screenshots**: Ensure stable network and no animations
-- **Dynamic Content**: Mock or wait for content to stabilize
-- **Cross-browser Differences**: Use consistent browser versions
-
-### Threshold Adjustments
-Modify thresholds in test files for acceptable differences:
-```javascript
-cy.compareSnapshot('homepage', {
-  threshold: 0.1, // 10% difference allowed
-  thresholdType: 'percent'
-});
-```
-
-## Project Structure
-
-```
-cypress/
-├── e2e/
-│   ├── visual-baseline.cy.js          # 6 baseline visual tests
-│   └── visual-responsive.cy.js        # 14 responsive + advanced tests
-├── fixtures/
-│   └── product.json                   # Test data
-├── support/
-│   ├── GreenKartPage.js               # Page Object Model
-│   └── commands.js                    # Custom commands
-
-cypress-image-diff/
-└── cypress-visual-report/
-    ├── cypress-visual-report.html     # HTML visual diff report (auto-generated, only file kept)
-    └── (historical JSON files auto-cleaned)
-
-scripts/
-├── run-visual-tests.js                # Test runner with auto-report generation
-└── clean-json-reports.js              # JSON cleanup script
-
-.github/workflows/
-└── visual-regression.yml              # GitHub Actions CI/CD
-
-.eslintrc.json                         # Cypress linting rules
-cypress.config.js                      # Cypress configuration
-cypress-image-diff.config.js           # Visual regression config
-cypress-image-diff-html-report.config.js # HTML report generator config
-```
-
-## Contributing
-
-1. Create a feature branch
-2. Add visual tests for new UI components
-3. Generate baselines for new tests
-4. Ensure tests pass in CI
-5. Submit a pull request
+- Add a smoke functional suite alongside the visual suite
+- Mock or stabilize dynamic homepage content to reduce threshold tolerance
+- Publish sample report screenshots directly in the README for faster review
+- Add status badges once the default branch and CI flow are finalized

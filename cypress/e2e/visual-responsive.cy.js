@@ -1,14 +1,5 @@
 const GreenKartPage = require('../support/GreenKartPage');
-
-// Takes better screenshots, Cypress bug workaround
-// https://cypress.visual-image-diff.dev/#guidelines-for-better-visual-testing-results
-function cypressBetterScreenshots() {
-  cy.get("html, body").invoke(
-    "attr",
-    "style",
-    "height: auto; scroll-behavior: auto;"
-  );
-}
+const { preparePageForSnapshot } = require('../support/visual-helpers');
 
 const viewports = [
   { name: 'desktop', width: 1280, height: 720 },
@@ -30,7 +21,7 @@ describe('Visual Regression - Responsive Design', () => {
       it(`should match homepage on ${viewport.name}`, () => {
         GreenKartPage.visit();
         cy.get('[class*="product"]').should('be.visible');
-        cypressBetterScreenshots();
+        preparePageForSnapshot();
         cy.compareSnapshot(`homepage-${viewport.name}`);
       });
 
@@ -38,7 +29,7 @@ describe('Visual Regression - Responsive Design', () => {
         GreenKartPage.visit();
         GreenKartPage.searchProduct(this.productData.productName);
         cy.get('[class*="product"]').should('have.length.greaterThan', 0);
-        cypressBetterScreenshots();
+        preparePageForSnapshot();
         cy.compareSnapshot(`search-results-${viewport.name}`);
       });
 
@@ -48,7 +39,7 @@ describe('Visual Regression - Responsive Design', () => {
         GreenKartPage.addToCart();
         GreenKartPage.openCart();
         cy.get('[class*="cartItems"]').should('exist');
-        cypressBetterScreenshots();
+        preparePageForSnapshot();
         cy.compareSnapshot(`cart-${viewport.name}`);
       });
     });
@@ -65,7 +56,7 @@ describe('Visual Regression - Advanced Scenarios', () => {
     GreenKartPage.visit();
     GreenKartPage.searchProduct(this.productData.invalidProduct);
     cy.get('.products').should('exist');
-    cypressBetterScreenshots();
+    preparePageForSnapshot();
     cy.compareSnapshot('error-state-empty-search');
   });
 
@@ -75,7 +66,7 @@ describe('Visual Regression - Advanced Scenarios', () => {
     cy.get('[class*="product"]').should('have.length.greaterThan', 0);
     cy.get('[class*="product"]').first().trigger('mouseover');
     cy.get('[class*="product"]').first().should('have.class');
-    cypressBetterScreenshots();
+    preparePageForSnapshot();
     cy.compareSnapshot('advanced-product-hover');
   });
 
@@ -84,7 +75,7 @@ describe('Visual Regression - Advanced Scenarios', () => {
     GreenKartPage.searchProduct(this.productData.productName);
     cy.get('[class*="product"]').should('have.length.greaterThan', 0);
     cy.get('button').contains('ADD TO CART').should('be.visible');
-    cypressBetterScreenshots();
+    preparePageForSnapshot();
     cy.compareSnapshot('advanced-add-cart-button');
   });
 
@@ -94,7 +85,7 @@ describe('Visual Regression - Advanced Scenarios', () => {
     GreenKartPage.addToCart();
     GreenKartPage.openCart();
     cy.get('[class*="cartItems"]').should('exist');
-    cypressBetterScreenshots();
+    preparePageForSnapshot();
     cy.compareSnapshot('advanced-cart-details');
   });
 
@@ -104,7 +95,7 @@ describe('Visual Regression - Advanced Scenarios', () => {
     GreenKartPage.addToCart();
     GreenKartPage.openCart();
     cy.get('button').contains('PROCEED TO CHECKOUT').should('be.visible');
-    cypressBetterScreenshots();
+    preparePageForSnapshot();
     cy.compareSnapshot('advanced-checkout-button');
   });
 });

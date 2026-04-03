@@ -4,16 +4,20 @@ cypress/videos/
 cypress/reports/
 cypress/downloads/
 
-# Visual regression - ignore comparison and diff, but track baselines
+# Visual regression - ignore comparison and diff, but track baselines and reports
 cypress-image-diff/cypress-visual-screenshots/comparison/
 cypress-image-diff/cypress-visual-screenshots/diff/
+
+# Ignore generated visual report artifacts
 cypress-image-diff/cypress-visual-report/
+
+# Ignore unused generated HTML report output folder
+cypress-image-diff-html-report/
 
 # Node modules
 node_modules/
 
-# Dependencies
-package-lock.json
+# Package managers
 yarn.lock
 
 # IDE

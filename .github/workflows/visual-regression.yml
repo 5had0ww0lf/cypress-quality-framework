@@ -24,11 +24,10 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm install
+      run: npm ci
     
     - name: Run ESLint
       run: npm run lint
-      continue-on-error: true
     
     - name: Run visual regression tests
       run: npm run visual:run
@@ -56,12 +55,18 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
-          const fs = require('fs');
-          const reportPath = 'cypress-image-diff/cypress-visual-report/cypress-visual-report.html';
-          const message = `Visual regression tests completed. [View detailed report](${reportPath})`;
+          const status = '${{ job.status }}' === 'success' ? 'passed' : 'failed';
+          const message = [
+            `Visual regression workflow ${status}.`,
+            '',
+            'Artifacts uploaded by this run:',
+            `- visual-regression-reports-${{ matrix.node-version }}`,
+            `- baseline-snapshots-${{ matrix.node-version }}`
+          ].join('\n');
+
           github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
             body: message
-          });
+          })

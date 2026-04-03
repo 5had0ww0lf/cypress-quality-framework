@@ -1,14 +1,5 @@
 const GreenKartPage = require('../support/GreenKartPage');
-
-// Takes better screenshots, Cypress bug workaround
-// https://cypress.visual-image-diff.dev/#guidelines-for-better-visual-testing-results
-function cypressBetterScreenshots() {
-  cy.get("html, body").invoke(
-    "attr",
-    "style",
-    "height: auto; scroll-behavior: auto;"
-  );
-}
+const { preparePageForSnapshot } = require('../support/visual-helpers');
 
 describe('Visual Regression Tests - GreenKart', () => {
   beforeEach(function() {
@@ -17,21 +8,21 @@ describe('Visual Regression Tests - GreenKart', () => {
 
   it('should match homepage visual baseline', () => {
     GreenKartPage.visit();
-    cypressBetterScreenshots();
+    preparePageForSnapshot();
     cy.compareSnapshot('homepage');
   });
 
   it('should match search results visual baseline', function() {
     GreenKartPage.visit();
     GreenKartPage.searchProduct(this.productData.productName);
-    cypressBetterScreenshots();
+    preparePageForSnapshot();
     cy.compareSnapshot('search-results');
   });
 
   it('should match empty search visual baseline', function() {
     GreenKartPage.visit();
     GreenKartPage.searchProduct(this.productData.invalidProduct);
-    cypressBetterScreenshots();
+    preparePageForSnapshot();
     cy.compareSnapshot('empty-search');
   });
 
@@ -40,14 +31,14 @@ describe('Visual Regression Tests - GreenKart', () => {
     GreenKartPage.searchProduct(this.productData.productName);
     GreenKartPage.addToCart();
     GreenKartPage.openCart();
-    cypressBetterScreenshots();
+    preparePageForSnapshot();
     cy.compareSnapshot('cart-with-items');
   });
 
   it('should match empty cart visual baseline', () => {
     GreenKartPage.visit();
     GreenKartPage.openCart();
-    cypressBetterScreenshots();
+    preparePageForSnapshot();
     cy.compareSnapshot('empty-cart');
   });
 
@@ -57,7 +48,7 @@ describe('Visual Regression Tests - GreenKart', () => {
     GreenKartPage.addToCart();
     GreenKartPage.openCart();
     GreenKartPage.proceedToCheckout();
-    cypressBetterScreenshots();
+    preparePageForSnapshot();
     cy.compareSnapshot('checkout-page');
   });
 });

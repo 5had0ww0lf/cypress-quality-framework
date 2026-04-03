@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
 const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const {
+  archiveGeneratedHtmlReport,
+  cleanupJsonReports,
+  ensureReportDir,
+  removeTemporaryHtmlReport
+} = require('./report-utils');
 
 // Get the spec file and any additional arguments
 const specFile = process.argv[2];
@@ -23,28 +27,58 @@ if (additionalArgs) {
 
 console.log(`Running: ${command}\n`);
 
+let cypressExitCode = 0;
+let reportGenerationFailed = false;
+
 try {
-  // Run Cypress tests  
   execSync(command, { stdio: 'inherit' });
 } catch (error) {
-  // Continue even if tests fail
+  cypressExitCode = error.status || 1;
   console.log('\nTests completed (some may have failed)\n');
 }
 
-// Generate HTML report
 console.log('Generating HTML report...');
 try {
+  ensureReportDir();
+  removeTemporaryHtmlReport();
+
   execSync('npm run visual:report', { stdio: 'inherit' });
 } catch (error) {
+  reportGenerationFailed = true;
   console.error('Error generating report:', error.message);
 }
 
-// Clean up JSON files
+console.log('Creating timestamped report archive...');
+try {
+  const archivedReport = archiveGeneratedHtmlReport();
+
+  if (archivedReport) {
+    console.log(`Timestamped report created: ${archivedReport}`);
+  } else if (reportGenerationFailed) {
+    console.error('No HTML report was generated, so nothing was archived.');
+  }
+} catch (error) {
+  console.error('Error creating timestamped report:', error.message);
+  reportGenerationFailed = true;
+}
+
 console.log('\nCleaning up JSON reports...');
 try {
-  execSync('npm run visual:clean-json', { stdio: 'inherit' });
+  const deletedJsonReports = cleanupJsonReports();
+
+  if (deletedJsonReports.length === 0) {
+    console.log('No JSON files to clean up');
+  } else {
+    console.log(`Removed ${deletedJsonReports.length} JSON report file(s)`);
+  }
 } catch (error) {
   console.error('Error cleaning JSON:', error.message);
 }
 
 console.log('\nVisual regression workflow complete!');
+
+if (reportGenerationFailed) {
+  process.exit(1);
+}
+
+process.exit(cypressExitCode);
