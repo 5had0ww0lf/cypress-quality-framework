@@ -1,98 +1,121 @@
-# Cypress Automation Project
+# Cypress Quality Engineering Framework
 
-This project showcases the use of Cypress for end-to-end testing on a sample e-commerce website. The tests are organized using the Page Object Model (POM) to ensure maintainability and reusability. The project includes various test cases to verify the functionality of the website, such as searching for products, adding products to the cart, and verifying the cart's contents.
+This repository is a Cypress-based quality engineering portfolio project built around the GreenKart demo storefront. It is organized as a lightweight framework so UI coverage is production-style today, while the structure can grow naturally into API, visual, performance, and accessibility testing over time.
 
-## Project Intent
+## Current Focus
 
-The intent of this project is to demonstrate knowledge and proficiency in using Cypress for automated testing. The tests are designed to cover common user interactions on an e-commerce site, providing a comprehensive example of how to use Cypress for real-world testing scenarios.
+- UI end-to-end coverage for core ecommerce flows
+- Fixture-driven test data
+- Page Object Model for maintainable selectors and interactions
+- Custom Cypress commands for reusable user actions
+- GitHub Actions execution with JUnit artifact upload
+- ESLint rules for Cypress-focused code quality
 
-## Setup Instructions
+## Framework Structure
 
-Follow these steps to set up the repository after cloning it to your machine:
+```text
+cypress-quality-engineering-framework/
+|
+|-- cypress/
+|   |-- e2e/
+|   |   `-- ui/
+|   |       `-- greenkart.cy.js
+|   |
+|   |-- support/
+|   |   |-- commands/
+|   |   |   `-- index.js
+|   |   `-- pages/
+|   |       `-- GreenKartPage.js
+|   |
+|   `-- fixtures/
+|       `-- product.json
+|
+|-- .github/workflows/
+|   `-- cypress-run.yml
+|
+|-- cypress.config.js
+|-- package.json
+`-- README.md
+```
+
+## Planned Expansion Paths
+
+The framework is intentionally organized so future capabilities can be added cleanly under:
+
+- `cypress/e2e/api/`
+- `cypress/e2e/visual/`
+- `cypress/e2e/performance/`
+- `cypress/e2e/accessibility/`
+- `cypress/support/services/`
+- `cypress/support/utils/`
+
+Those areas are not scaffolded yet because this branch only keeps structure that is backed by real implementation.
+
+## Application Under Test
+
+- URL: `https://rahulshettyacademy.com/seleniumPractise/#/`
+- Domain: ecommerce browsing and checkout
+- Purpose: demonstrate maintainable Cypress test design, not just isolated test scripts
+
+## Current Test Coverage
+
+The UI suite in `cypress/e2e/ui/greenkart.cy.js` covers:
+
+- Visiting the storefront and validating the title
+- Searching for a valid product
+- Handling invalid product searches
+- Adding an item to the cart
+- Checking cart totals
+- Verifying an empty cart state
+- Removing items from the cart
+- Completing a purchase flow
+- Intercepting a network request during page load
+
+## Design Decisions
+
+- Page-object methods keep selectors and interaction flows centralized
+- Fixture data keeps tests readable and easier to extend
+- A custom `cy.searchProduct()` command isolates a repeated user action
+- The repo structure favors capability-based growth instead of a flat test folder
+- CI runs the suite headlessly and publishes machine-readable test output
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (version 14 or higher)
-- npm (Node Package Manager)
+- Node.js 20 or newer
+- npm
 
-### Steps
+### Install
 
-1. **Clone the repository**
+```bash
+npm install
+```
 
-   ```sh
-   git clone <repository-url>
-   cd <repository-directory>
-   ```
+### Run the UI Suite
 
-2. **Install dependencies**
+```bash
+npm run cy:run
+```
 
-   ```sh
-   npm install
-   ```
+### Open Cypress Interactively
 
-3. **Run Cypress Tests**
+```bash
+npm run cy:open
+```
 
-   Open the Cypress Test Runner:
+## CI Workflow
 
-   ```sh
-   npx cypress open
-   ```
+`.github/workflows/cypress-run.yml`:
 
-   Or run the tests in headless mode:
+- installs dependencies with `npm ci`
+- runs the UI suite on pushes and pull requests to `main` / `master`
+- exports JUnit XML test results as an artifact
 
-   ```sh
-   npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js"
-   ```
+## Next Improvements
 
-4. **Optional: run a single test**
-
-   ```sh
-   npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js" --browser chrome
-   ```
-- cypress/support/GreenKartPage.js: Page Object Model for the GreenKart page.
-- cypress.config.js: Cypress configuration file.
-
-### Overview
-
-This repo is designed as a polished Cypress portfolio project with:
-
-- Page Object Model (POM) in `cypress/support/GreenKartPage.js`
-- Fixture-driven data in `cypress/fixtures/product.json`
-- Negative and positive flows
-- CI workflow in `.github/workflows/cypress-run.yml`
-
-### Test Cases
-
-The project includes the following test cases:
-
-1. **Visit the URL and check the title**
-2. **Search for a product**
-3. **Add a product to the cart**
-4. **Verify the cart is empty initially**
-5. **Verify the total amount in the cart**
-6. **Show no results for an invalid product search**
-7. **Intercept network request and assert mocked backend response**
-8. **Remove a product from the cart**
-9. **Buy a product**
-
-### How to run
-
-- `npm install`
-- `npx cypress open` (interactive)
-- `npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js"` (headless)
-- `npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js" --browser chrome`
-
-### CI / reporting
-
-- GitHub Action: `.github/workflows/cypress-run.yml`
-- Add reporter flags in workflow to generate JUnit XML:
-  - `npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js" --reporter junit --reporter-options mochaFile=results/junit.[hash].xml`
-
-### Notes for reviewers
-
-- `cypress.config.js` already has `baseUrl` set to https://rahulshettyacademy.com/seleniumPractise/#/
-- Data-driven scenario uses `cypress/fixtures/product.json` including `invalidProduct`.
-- No explicit `cy.wait` calls; all waits are handled by `.should` assertions.
-- To harden further, add data-cy in web app elements and lint with `eslint-plugin-cypress`.
-
-
+- Add API coverage under `cypress/e2e/api/`
+- Add visual regression coverage under `cypress/e2e/visual/`
+- Add accessibility checks under `cypress/e2e/accessibility/`
+- Add performance auditing under `cypress/e2e/performance/` or a dedicated `lighthouse/` area
+- Extract shared helpers into `cypress/support/utils/` when utility code grows

@@ -21,7 +21,7 @@ jobs:
         run: npm ci
 
       - name: Run Cypress tests
-        run: npx cypress run --spec "cypress/e2e/greenKart/e2e.cy.js" --reporter junit --reporter-options mochaFile=results/junit.[hash].xml
+        run: npx cypress run --spec "cypress/e2e/ui/greenkart.cy.js" --reporter junit --reporter-options mochaFile=results/junit.[hash].xml
 
       - name: Upload JUnit report artifact
         uses: actions/upload-artifact@v4
