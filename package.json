@@ -1,4 +1,11 @@
 {
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "visual:run": "cypress run --spec 'cypress/e2e/visualRegression-greenKart.cy.js'",
+    "visual:baseline": "cypress run --spec 'cypress/e2e/visualRegression-greenKart.cy.js' --env updateSnapshots=true",
+    "lint": "eslint . --ext .js"
+  },
   "devDependencies": {
     "cypress": "^14.2.0",
     "cypress-iframe": "^1.0.1",

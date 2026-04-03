@@ -1,41 +1,64 @@
 const GreenKartPage = require('../support/GreenKartPage');
 
-const url = [
-  "",
-];
-  
-  //Takes better screenshots, Cypress bug workaround
-  //https://cypress.visual-image-diff.dev/#guidelines-for-better-visual-testing-results
-  function cypressBetterScreenshots() {
-    cy.get("html, body").invoke(
-      "attr",
-      "style",
-      "height: auto; scroll-behavior: auto;"
-    )
-  }
-  
-  describe('Visuals regression test, array of URLs', () => {
+// Takes better screenshots, Cypress bug workaround
+// https://cypress.visual-image-diff.dev/#guidelines-for-better-visual-testing-results
+function cypressBetterScreenshots() {
+  cy.get("html, body").invoke(
+    "attr",
+    "style",
+    "height: auto; scroll-behavior: auto;"
+  );
+}
 
-    before(function() {
-      cy.fixture('product').as('productData');
-    });
-  
-    for (let i=0; i<url.length; i++){
-        it('should compare screenshot of the entire page: '+url[i]+'', () => { 
-          //cy.visit(jaxUrl+url[i])   //delete if BaseUrl NPM script works
-          cy.visit('/'+url[i])
-          cy.wait(1000)
-  
-          url[i] = url[i].replace(/\//g, '-'); //replace forward slash for better screenshot filenaming
-          if (i == 0) {
-            cypressBetterScreenshots()
-            cy.compareSnapshot('/'+'greenKart-homepage')
-          }
-          else{
-            cypressBetterScreenshots()
-            cy.compareSnapshot('/'+'greenKart-'+url[i])
-          }
-        })
-      }
-    })
+describe('Visual Regression Tests - GreenKart', () => {
+  beforeEach(function() {
+    cy.fixture('product').as('productData');
+  });
+
+  it('should match homepage visual baseline', () => {
+    GreenKartPage.visit();
+    cypressBetterScreenshots();
+    cy.compareSnapshot('homepage');
+  });
+
+  it('should match search results visual baseline', function() {
+    GreenKartPage.visit();
+    GreenKartPage.searchProduct(this.productData.productName);
+    cypressBetterScreenshots();
+    cy.compareSnapshot('search-results');
+  });
+
+  it('should match empty search visual baseline', function() {
+    GreenKartPage.visit();
+    GreenKartPage.searchProduct(this.productData.invalidProduct);
+    cypressBetterScreenshots();
+    cy.compareSnapshot('empty-search');
+  });
+
+  it('should match cart with items visual baseline', function() {
+    GreenKartPage.visit();
+    GreenKartPage.searchProduct(this.productData.productName);
+    GreenKartPage.addToCart();
+    GreenKartPage.openCart();
+    cypressBetterScreenshots();
+    cy.compareSnapshot('cart-with-items');
+  });
+
+  it('should match empty cart visual baseline', () => {
+    GreenKartPage.visit();
+    GreenKartPage.openCart();
+    cypressBetterScreenshots();
+    cy.compareSnapshot('empty-cart');
+  });
+
+  it('should match checkout page visual baseline', function() {
+    GreenKartPage.visit();
+    GreenKartPage.searchProduct(this.productData.productName);
+    GreenKartPage.addToCart();
+    GreenKartPage.openCart();
+    GreenKartPage.proceedToCheckout();
+    cypressBetterScreenshots();
+    cy.compareSnapshot('checkout-page');
+  });
+});
   

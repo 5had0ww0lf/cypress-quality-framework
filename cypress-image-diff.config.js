@@ -1,24 +1,8 @@
-//const { defineConfig } = require("cypress");
-
 const config = {
-  ROOT_DIR: 'custom-folder-name',         //not working according to documentation yet
-  REPORT_DIR: 'html-report',              //plugin v2: not working according to documentation yet
-  SCREENSHOTS_DIR: 'visual-screenshots'   //plugin v2: not working according to documentation yet
-
+  ROOT_DIR: 'cypress-image-diff',
+  REPORT_DIR: 'visual-reports',
+  SCREENSHOTS_DIR: 'visual-screenshots',
+  FAILURE_THRESHOLD: 0.1  // Allow 10% difference for demo site
 };
 
 module.exports = config;
-
-
-module.exports = defineConfig({
-  e2e: {
-    setupNodeEvents(on, config) {
-      return getCompareSnapshotsPlugin(on, config);
-    },
-  }
-});
-
-/*
-Force resolution size
-https://cypress.visual-image-diff.dev/#force-resolution-size
-*/
