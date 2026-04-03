@@ -1,7 +1,7 @@
 {
   "scripts": {
     "cy:open": "cypress open",
-    "cy:run": "cypress run --spec \"cypress/e2e/**\"",
+    "cy:run": "cypress run --browser chrome --spec \"cypress/e2e/**\"",
     "lint": "eslint . --ext .js"
   },
   "devDependencies": {

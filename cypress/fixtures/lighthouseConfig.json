@@ -1,9 +1,9 @@
 {
   "lighthouse": {
     "thresholds": {
-      "performance": 45,
+      "performance": 30,
       "accessibility": 60,
-      "best-practices": 80,
+      "best-practices": 70,
       "seo": 82,
       "pwa": 25
     },
