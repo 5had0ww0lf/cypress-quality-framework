@@ -3,8 +3,29 @@ cypress/screenshots/
 cypress/videos/
 cypress/reports/
 cypress/downloads/
-cypress-visual-report/
-cypress-visual-screenshots/
+
+# Visual regression - ignore comparison and diff, but track baselines
+cypress-image-diff/cypress-visual-screenshots/comparison/
+cypress-image-diff/cypress-visual-screenshots/diff/
+cypress-image-diff/cypress-visual-report/
 
 # Node modules
 node_modules/
+
+# Dependencies
+package-lock.json
+yarn.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local

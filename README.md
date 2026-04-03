@@ -142,8 +142,92 @@ Visual diff reports are generated in `cypress-image-diff/visual-reports/`:
 - Set up notifications for visual regressions
 - Use parallel execution for faster feedback
 
-## Troubleshooting
+## Responsive Design Testing
 
+The branch includes comprehensive responsive viewport testing:
+
+### Viewport Breakpoints
+- Desktop: 1280x720
+- Tablet: 1024x768
+- Mobile: 375x667
+
+### Running Responsive Tests
+```bash
+npm run cypress run --spec "cypress/e2e/visualRegression-advanced.cy.js"
+```
+
+Each test suite runs across all viewports to ensure consistent visual design across devices.
+## Performance Optimization
+
+### Headless Chrome Optimization
+- Tests run in headless mode for faster execution
+- Parallel execution possible across multiple node versions
+- Baseline image caching for repeated runs
+
+### Execution Strategy
+- Run visual tests in headless mode for CI
+- Use Chrome for consistency (Lighthouse/Pa11y requirements)
+- Screenshot throttling and network simulation available
+
+### Optimization Tips
+```bash
+# Run tests in parallel (useful for large test suites)
+npm run cy:run -- --parallel
+
+# Run with specific browser optimization
+npm run visual:run -- --browser chrome:headless
+```
+
+## Reporting and Metrics
+
+### HTML Visual Diff Reports
+Located in `cypress-image-diff/cypress-visual-report/`:
+- Side-by-side baseline and comparison images
+- Pixel difference highlighting with red overlay
+- Difference percentage calculation
+- Thumbnail navigation for quick review
+
+### Report Contents
+- Test execution summary
+- Pass/fail status per test
+- Visual diff images with annotations
+- Timestamp and environment metadata
+
+### Historical Tracking
+- Reports timestamped: `report_DD-MM-YYYY_HHMMSS.json`
+- Artifacts preserved for 30 days in GitHub Actions
+- Enables trend analysis and regression detection
+
+### Baseline Management
+- Baselines tracked in Git for version control
+- Diff and comparison folders excluded (regenerated per run)
+- Easy rollback to previous versions via Git history
+
+## CI/CD Integration
+
+### GitHub Actions Workflow
+The `.github/workflows/visual-regression.yml` provides:
+- Automated testing on push and pull requests
+- Multi-node version testing (18.x, 20.x)
+- ESLint code quality checks
+- Report artifact uploads for 30-day retention
+- PR comments with result summaries
+
+### Running in CI
+```yaml
+- Run ESLint for code quality
+- Execute visual regression tests
+- Upload HTML reports and baseline snapshots
+- Comment on PRs with results
+```
+
+### Local Validation
+Before pushing:
+```bash
+npm run lint          # Validate code
+npm run visual:run    # Run tests locally
+npm run visual:baseline  # Update baselines if needed
+```
 ### Common Issues
 - **Inconsistent Screenshots**: Ensure stable network and no animations
 - **Dynamic Content**: Mock or wait for content to stabilize

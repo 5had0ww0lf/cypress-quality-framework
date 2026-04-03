@@ -8,8 +8,10 @@ class GreenKartPage {
   }
 
   searchProduct(productName) {
+    cy.get('.search-keyword').clear();
     cy.get('.search-keyword').type(productName);
-    cy.wait(2000);
+    // Wait for either products to load or search to complete
+    cy.get('.products', { timeout: 5000 }).should('exist');
   }
 
   getVisibleProducts() {

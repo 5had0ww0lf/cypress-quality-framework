@@ -10,6 +10,8 @@
     "cypress": "^14.2.0",
     "cypress-iframe": "^1.0.1",
     "cypress-image-diff-html-report": "^2.2.0",
-    "cypress-image-diff-js": "^1.32.0"
+    "cypress-image-diff-js": "^1.32.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-cypress": "^2.13.1"
   }
 }
