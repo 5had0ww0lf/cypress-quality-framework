@@ -132,10 +132,41 @@ npx cypress run --spec "cypress/e2e/visual-responsive.cy.js"
 
 ## Reports
 
-Visual diff reports are generated in `cypress-image-diff/visual-reports/`:
-- HTML reports with side-by-side comparisons
+### Automated HTML Report Generation
+
+Visual diff reports are **automatically generated** in `cypress-image-diff/cypress-visual-report/`:
+
+#### Report File: `cypress-visual-report.html`
+- **Updated automatically** after each test run
+- Side-by-side baseline and comparison images
 - Highlighted differences with pixel counts
-- Thumbnail navigation for multiple screenshots
+- Thumbnail navigation for quick review
+- Interactive report viewer (light/dark theme support)
+- Detailed statistics and metadata
+
+#### Report Workflow
+When you run any visual test command (`npm run visual:run`, etc.):
+1. ✅ Tests execute against baseline images
+2. ✅ JSON report is generated from test results
+3. ✅ HTML report is created from JSON data
+4. ✅ Old JSON files are automatically cleaned up
+
+**Result**: Only `cypress-visual-report.html` remains in the report directory after each run.
+
+#### Accessing Reports
+```bash
+# Open the HTML report in your browser
+open cypress-image-diff/cypress-visual-report/cypress-visual-report.html
+
+# Or use the file directly (Chrome/Firefox/Safari)
+```
+
+#### Report Contents
+- Test execution summary
+- Pass/fail status per test
+- Visual diff images with annotations
+- Timestamp and environment metadata
+- Difference percentage and pixel counts
 
 ## Best Practices
 
@@ -195,26 +226,31 @@ npm run visual:run -- --browser chrome:headless
 ## Reporting and Metrics
 
 ### HTML Visual Diff Reports
-Located in `cypress-image-diff/cypress-visual-report/`:
-- Side-by-side baseline and comparison images
+Located in `cypress-image-diff/cypress-visual-report/cypress-visual-report.html`:
+- **Always HTML format**, automatically generated after each test run
+- Side-by-side baseline and comparison images  
 - Pixel difference highlighting with red overlay
 - Difference percentage calculation
 - Thumbnail navigation for quick review
+- Responsive design, works on desktop and mobile
 
 ### Report Contents
-- Test execution summary
-- Pass/fail status per test
-- Visual diff images with annotations
+- Test execution summary with pass/fail statistics
+- Per-test visual comparison with annotations
 - Timestamp and environment metadata
+- Browser and viewport information
+- Execution duration
 
-### Historical Tracking
-- Reports timestamped: `report_DD-MM-YYYY_HHMMSS.json`
-- Artifacts preserved for 30 days in GitHub Actions
-- Enables trend analysis and regression detection
+### JSON Intermediate Files
+- Automatically created during test runs
+- Used to generate the HTML report
+- **Automatically deleted** after HTML generation
+- No manual cleanup required
 
 ### Baseline Management
 - Baselines tracked in Git for version control
-- Diff and comparison folders excluded (regenerated per run)
+- Located in: `cypress/support/compare_images/` (if exists)
+- Diff and comparison folders excluded from Git
 - Easy rollback to previous versions via Git history
 
 ## CI/CD Integration
@@ -296,10 +332,13 @@ cypress/
 │   └── commands.js                    # Custom commands
 
 cypress-image-diff/
-├── cypress-visual-report.html         # Main HTML report
-├── cypress-visual-report/             # Timestamped JSON reports
-└── cypress-visual-screenshots/
-    └── baseline/                      # Reference images (tracked)
+└── cypress-visual-report/
+    ├── cypress-visual-report.html     # HTML visual diff report (auto-generated, only file kept)
+    └── (historical JSON files auto-cleaned)
+
+scripts/
+├── run-visual-tests.js                # Test runner with auto-report generation
+└── clean-json-reports.js              # JSON cleanup script
 
 .github/workflows/
 └── visual-regression.yml              # GitHub Actions CI/CD
@@ -307,6 +346,7 @@ cypress-image-diff/
 .eslintrc.json                         # Cypress linting rules
 cypress.config.js                      # Cypress configuration
 cypress-image-diff.config.js           # Visual regression config
+cypress-image-diff-html-report.config.js # HTML report generator config
 ```
 
 ## Contributing

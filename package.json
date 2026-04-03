@@ -2,10 +2,12 @@
   "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "visual:run": "cypress run --spec 'cypress/e2e/visual-baseline.cy.js'",
-    "visual:baseline": "cypress run --spec 'cypress/e2e/visual-baseline.cy.js' --env updateSnapshots=true",
-    "visual:responsive": "cypress run --spec 'cypress/e2e/visual-responsive.cy.js'",
-    "visual:all": "cypress run --spec 'cypress/e2e/visual-*.cy.js'",
+    "visual:run": "node scripts/run-visual-tests.js visual-baseline.cy.js",
+    "visual:baseline": "node scripts/run-visual-tests.js visual-baseline.cy.js --env updateSnapshots=true",
+    "visual:responsive": "node scripts/run-visual-tests.js visual-responsive.cy.js",
+    "visual:all": "node scripts/run-visual-tests.js 'visual-*.cy.js'",
+    "visual:report": "cypress-image-diff-html-report generate",
+    "visual:clean-json": "node scripts/clean-json-reports.js",
     "lint": "eslint . --ext .js"
   },
   "devDependencies": {
