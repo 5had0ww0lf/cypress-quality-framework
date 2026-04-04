@@ -59,7 +59,7 @@ jobs:
           name: visual-baseline-snapshots
           path: cypress-image-diff/cypress-visual-screenshots/baseline/
 
-  performance-audit:
+  lighthouse-audit:
     runs-on: windows-latest
 
     steps:
