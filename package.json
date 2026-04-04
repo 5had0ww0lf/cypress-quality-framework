@@ -9,6 +9,12 @@
     "visual:all": "node scripts/run-visual-tests.js visual/*.cy.js",
     "lint": "eslint . --ext .js"
   },
+  "overrides": {
+    "form-data": "^4.0.4",
+    "lodash": "^4.18.0",
+    "tar-fs": "^3.0.9",
+    "ws": "^8.17.1"
+  },
   "devDependencies": {
     "@cypress-audit/lighthouse": "^1.4.2",
     "cypress": "^14.2.0",
