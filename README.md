@@ -1,4 +1,4 @@
-# Cypress Quality Engineering Framework
+# Cypress Quality Framework
 
 A Cypress-based quality engineering portfolio project built around the GreenKart demo storefront. The goal of this repo is to show more than basic end-to-end test automation: it demonstrates a capability-based framework with UI coverage, visual regression testing, Lighthouse auditing, reusable page objects, custom commands, and CI artifact publishing.
 
@@ -49,7 +49,7 @@ Because this project audits a public demo application, Lighthouse scores can var
 ## Framework Structure
 
 ```text
-cypress-quality-engineering-framework/
+cypress-quality-framework/
 |
 |-- cypress/
 |   |-- e2e/
