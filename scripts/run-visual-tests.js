@@ -31,20 +31,22 @@ try {
   execSync(command, { stdio: 'inherit' });
 } catch (error) {
   cypressExitCode = error.status || 1;
-  console.log('\nTests completed (some may have failed)\n');
+  console.log('\nCypress finished with test failures.');
+  console.log('The visual HTML report will still be generated if JSON output is available.\n');
 }
 
-console.log('Generating HTML report...');
+console.log('Checking whether a visual HTML report can be generated...');
 if (hasJsonReportOutput()) {
   try {
     ensureReportDir();
+    console.log('Generating visual HTML report from the current run output...');
     execSync('npx cypress-image-diff-html-report generate', { stdio: 'inherit' });
   } catch (error) {
     reportGenerationFailed = true;
     console.error('Error generating report:', error.message);
   }
 } else {
-  console.log('Skipping HTML report generation because no JSON report output was created.');
+  console.log('Skipping visual HTML report generation because no JSON report output was created.');
 }
 
 console.log('\nCleaning up JSON reports...');
@@ -58,6 +60,10 @@ try {
   }
 } catch (error) {
   console.error('Error cleaning JSON:', error.message);
+}
+
+if (cypressExitCode !== 0 && !reportGenerationFailed) {
+  console.log('\nVisual report generation completed, but the Cypress run still failed.');
 }
 
 console.log('\nVisual regression workflow complete!');
