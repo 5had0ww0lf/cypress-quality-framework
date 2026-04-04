@@ -1,15 +1,16 @@
 {
   "scripts": {
     "cy:open": "cypress open",
-    "cy:run": "cypress run --spec \"cypress/e2e/ui/greenkart.cy.js\"",
+    "e2e:run": "cypress run --spec \"cypress/e2e/ui/greenkart.cy.js\"",
+    "lighthouse:run": "cypress run --browser chrome --spec \"cypress/e2e/lighthouse/lighthouse.cy.js\"",
     "visual:run": "node scripts/run-visual-tests.js visual/visual-baseline.cy.js",
     "visual:baseline": "node scripts/run-visual-tests.js visual/visual-baseline.cy.js --env updateSnapshots=true",
     "visual:responsive": "node scripts/run-visual-tests.js visual/visual-responsive.cy.js",
     "visual:all": "node scripts/run-visual-tests.js visual/*.cy.js",
-    "visual:report": "cypress-image-diff-html-report generate",
     "lint": "eslint . --ext .js"
   },
   "devDependencies": {
+    "@cypress-audit/lighthouse": "^1.4.2",
     "cypress": "^14.2.0",
     "cypress-image-diff-html-report": "^2.2.0",
     "cypress-image-diff-js": "^1.32.0",

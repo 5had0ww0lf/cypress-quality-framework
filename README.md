@@ -1,16 +1,50 @@
 # Cypress Quality Engineering Framework
 
-This repository is a Cypress-based quality engineering portfolio project built around the GreenKart demo storefront. It is organized as a lightweight framework so UI and visual regression coverage are implemented today, while the structure can continue growing into API, performance, and accessibility testing over time.
+A Cypress-based quality engineering portfolio project built around the GreenKart demo storefront. The goal of this repo is to show more than basic end-to-end test automation: it demonstrates a capability-based framework with UI coverage, visual regression testing, Lighthouse auditing, reusable page objects, custom commands, and CI artifact publishing.
 
-## Current Focus
+## What This Project Demonstrates
 
-- UI end-to-end coverage for core ecommerce flows
-- Visual regression coverage with HTML reporting
-- Fixture-driven test data
-- Page Object Model for maintainable selectors and interactions
-- Custom Cypress commands for reusable user actions
-- GitHub Actions execution with JUnit artifact upload
-- ESLint rules for Cypress-focused code quality
+- UI automation for core ecommerce flows
+- Visual regression testing with baseline management and HTML reporting
+- Lighthouse performance, accessibility, best-practices, and SEO auditing
+- Maintainable test design through Page Object Model, fixtures, and support utilities
+- Capability-based project structure designed to scale into API and accessibility testing
+- GitHub Actions execution with artifact publishing for reports and baseline assets
+
+## Implemented Capabilities
+
+### UI End-to-End Testing
+
+The UI suite in `cypress/e2e/ui/greenkart.cy.js` covers:
+
+- storefront load and title validation
+- valid and invalid product search flows
+- add-to-cart and remove-from-cart flows
+- cart totals and empty-cart validation
+- purchase flow completion
+- request interception during application load
+
+### Visual Regression Testing
+
+The visual suites in `cypress/e2e/visual/` cover:
+
+- baseline snapshots for homepage, search, cart, empty cart, and checkout states
+- responsive checks across desktop, tablet, and mobile viewports
+- generated HTML diff reporting through `cypress-image-diff-html-report`
+- tracked baseline snapshots with generated comparison and diff output ignored from Git
+
+Visual report generation is automatic when the visual workflow runs.
+
+### Lighthouse Auditing
+
+The Lighthouse suite in `cypress/e2e/lighthouse/` covers:
+
+- desktop Lighthouse audits
+- mobile-emulated Lighthouse audits
+- timestamped HTML report generation under `lighthouse-reports/`
+- calibrated thresholds that better match a public demo site than production-grade budgets
+
+Because this project audits a public demo application, Lighthouse scores can vary slightly between local and CI environments.
 
 ## Framework Structure
 
@@ -21,6 +55,8 @@ cypress-quality-engineering-framework/
 |   |-- e2e/
 |   |   |-- ui/
 |   |   |   `-- greenkart.cy.js
+|   |   |-- lighthouse/
+|   |   |   `-- lighthouse.cy.js
 |   |   `-- visual/
 |   |       |-- visual-baseline.cy.js
 |   |       `-- visual-responsive.cy.js
@@ -34,75 +70,40 @@ cypress-quality-engineering-framework/
 |   |       `-- visual-helpers.js
 |   |
 |   `-- fixtures/
+|       |-- lighthouse-config.json
 |       `-- product.json
 |
 |-- .github/workflows/
 |   `-- cypress-run.yml
-|
 |-- cypress-image-diff/
 |   `-- cypress-visual-screenshots/
 |       `-- baseline/
-|
 |-- cypress-image-diff-html-report.config.js
 |-- cypress-image-diff.config.js
+|-- lighthouse-reports/
 |-- scripts/
+|   |-- lighthouse-report-utils.js
 |   |-- report-utils.js
 |   `-- run-visual-tests.js
-|
 |-- cypress.config.js
 |-- package.json
 `-- README.md
 ```
 
-## Planned Expansion Paths
+## Design Choices
 
-The framework is intentionally organized so future capabilities can be added cleanly under:
-
-- `cypress/e2e/api/`
-- `cypress/e2e/performance/`
-- `cypress/e2e/accessibility/`
-- `cypress/support/services/`
-
-Those areas are not scaffolded yet because this branch only keeps structure that is backed by real implementation.
+- Page-object methods centralize selectors and business actions instead of scattering DOM logic across tests.
+- Fixtures keep test data readable and make scenario expansion easier.
+- Custom commands isolate repeated user actions such as product search.
+- Visual helpers improve screenshot stability for full-page comparisons.
+- Small Node scripts handle reporting and cleanup more reliably than long shell chains.
+- CI publishes artifacts so visual and Lighthouse output can be reviewed outside the terminal.
 
 ## Application Under Test
 
 - URL: `https://rahulshettyacademy.com/seleniumPractise/#/`
 - Domain: ecommerce browsing and checkout
-- Purpose: demonstrate maintainable Cypress test design, not just isolated test scripts
-
-## Current Test Coverage
-
-The UI suite in `cypress/e2e/ui/greenkart.cy.js` covers:
-
-- Visiting the storefront and validating the title
-- Searching for a valid product
-- Handling invalid product searches
-- Adding an item to the cart
-- Checking cart totals
-- Verifying an empty cart state
-- Removing items from the cart
-- Completing a purchase flow
-- Intercepting a network request during page load
-
-## Visual Regression Coverage
-
-The visual suites in `cypress/e2e/visual/` cover:
-
-- baseline snapshots for homepage, search, cart, empty cart, and checkout
-- responsive snapshots across desktop, tablet, and mobile
-- advanced states such as invalid search, hover, cart detail, and CTA visibility
-- latest-run HTML reporting through `cypress-image-diff-html-report`
-
-## Design Decisions
-
-- Page-object methods keep selectors and interaction flows centralized
-- Fixture data keeps tests readable and easier to extend
-- A custom `cy.searchProduct()` command isolates a repeated user action
-- Visual helpers prepare the page for more stable full-page screenshots
-- Report orchestration is handled through small Node scripts rather than long shell chains
-- The repo structure favors capability-based growth instead of a flat test folder
-- CI runs the suite headlessly and publishes machine-readable test output
+- Purpose: demonstrate maintainable Cypress test architecture on a realistic public demo app
 
 ## Getting Started
 
@@ -110,6 +111,7 @@ The visual suites in `cypress/e2e/visual/` cover:
 
 - Node.js 20 or newer
 - npm
+- Chrome for Lighthouse execution
 
 ### Install
 
@@ -120,7 +122,7 @@ npm install
 ### Run the UI Suite
 
 ```bash
-npm run cy:run
+npm run e2e:run
 ```
 
 ### Run Visual Regression
@@ -132,6 +134,12 @@ npm run visual:responsive
 npm run visual:all
 ```
 
+### Run Lighthouse Audits
+
+```bash
+npm run lighthouse:run
+```
+
 ### Open Cypress Interactively
 
 ```bash
@@ -140,17 +148,20 @@ npm run cy:open
 
 ## CI Workflow
 
-`.github/workflows/cypress-run.yml`:
+The GitHub Actions workflow in `.github/workflows/cypress-run.yml`:
 
 - installs dependencies with `npm ci`
-- runs the UI suite on pushes and pull requests to `main` / `master`
-- runs the visual baseline suite as a dedicated job
-- exports JUnit XML test results as an artifact
-- uploads visual HTML reports and baseline snapshots as artifacts
+- runs the UI suite on pushes and pull requests to `main` and `master`
+- runs visual regression in a dedicated job
+- runs Lighthouse auditing in a dedicated Chrome-based job
+- uploads JUnit, visual report, baseline snapshot, and Lighthouse report artifacts
 
-## Next Improvements
+## Planned Expansion
 
-- Add API coverage under `cypress/e2e/api/`
-- Add accessibility checks under `cypress/e2e/accessibility/`
-- Add performance auditing under `cypress/e2e/performance/` or a dedicated `lighthouse/` area
-- Extract shared helpers into `cypress/support/utils/` when utility code grows
+This framework is intentionally structured so additional capabilities can be added without flattening the repo:
+
+- `cypress/e2e/api/`
+- `cypress/e2e/accessibility/`
+- `cypress/support/services/`
+
+Those areas are not scaffolded yet because this branch only keeps structure backed by real implementation.

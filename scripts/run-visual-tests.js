@@ -38,7 +38,7 @@ console.log('Generating HTML report...');
 if (hasJsonReportOutput()) {
   try {
     ensureReportDir();
-    execSync('npm run visual:report', { stdio: 'inherit' });
+    execSync('npx cypress-image-diff-html-report generate', { stdio: 'inherit' });
   } catch (error) {
     reportGenerationFailed = true;
     console.error('Error generating report:', error.message);

@@ -1,0 +1,55 @@
+{
+  "desktop": {
+    "thresholds": {
+      "performance": 30,
+      "accessibility": 60,
+      "best-practices": 75,
+      "seo": 80
+    },
+    "options": {
+      "formFactor": "desktop",
+      "screenEmulation": {
+        "disabled": true
+      }
+    },
+    "config": {
+      "extends": "lighthouse:default",
+      "settings": {
+        "output": "html",
+        "onlyCategories": [
+          "performance",
+          "accessibility",
+          "best-practices",
+          "seo"
+        ]
+      }
+    }
+  },
+  "mobile": {
+    "thresholds": {
+      "performance": 25,
+      "accessibility": 60,
+      "best-practices": 70,
+      "seo": 80
+    },
+    "options": {
+      "formFactor": "mobile",
+      "screenEmulation": {
+        "disabled": false
+      }
+    },
+    "config": {
+      "extends": "lighthouse:default",
+      "settings": {
+        "output": "html",
+        "emulatedFormFactor": "mobile",
+        "onlyCategories": [
+          "performance",
+          "accessibility",
+          "best-practices",
+          "seo"
+        ]
+      }
+    }
+  }
+}

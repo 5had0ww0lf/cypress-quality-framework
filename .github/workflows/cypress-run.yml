@@ -58,3 +58,26 @@ jobs:
         with:
           name: visual-baseline-snapshots
           path: cypress-image-diff/cypress-visual-screenshots/baseline/
+
+  performance-audit:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Lighthouse audit suite
+        run: npm run lighthouse:run
+
+      - name: Upload Lighthouse report artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: lighthouse-reports/
