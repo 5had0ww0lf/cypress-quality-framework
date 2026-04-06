@@ -134,11 +134,21 @@ npm run visual:responsive
 npm run visual:all
 ```
 
+`visual:baseline` refreshes the tracked baseline snapshots for the baseline visual suite before comparing against the current run.
+
 ### Run Lighthouse Audits
 
 ```bash
 npm run lighthouse:run
 ```
+
+### Run All Quality Checks
+
+```bash
+npm run quality:run
+```
+
+This runs the UI suite, the baseline visual regression suite, and the Lighthouse audit in sequence.
 
 ### Open Cypress Interactively
 
@@ -154,7 +164,7 @@ The GitHub Actions workflow in `.github/workflows/cypress-run.yml`:
 - runs the UI suite on pushes and pull requests to `main` and `master`
 - runs visual regression in a dedicated job
 - runs Lighthouse auditing in a dedicated Chrome-based job
-- uploads JUnit, visual report, baseline snapshot, and Lighthouse report artifacts
+- uploads JUnit, visual report, and Lighthouse report artifacts
 
 ## Planned Expansion
 
