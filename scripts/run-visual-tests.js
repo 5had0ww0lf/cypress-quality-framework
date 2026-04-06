@@ -2,13 +2,16 @@
 
 const { execSync } = require('child_process');
 const {
+  bundleVisualAssetsForReport,
   hasJsonReportOutput,
+  resetBaselineForSpec,
   cleanupJsonReports,
   ensureReportDir
 } = require('./report-utils');
 
 const specFile = process.argv[2];
 const additionalArgs = process.argv.slice(3).join(' ');
+const shouldUpdateBaselines = /\bupdateSnapshots=true\b/i.test(additionalArgs);
 
 if (!specFile) {
   console.error('Error: spec file required');
@@ -20,6 +23,25 @@ const spec = `cypress/e2e/${specFile}`;
 let command = `npx cypress run --spec "${spec}"`;
 if (additionalArgs) {
   command += ` ${additionalArgs}`;
+}
+
+if (shouldUpdateBaselines) {
+  console.log(`Refreshing baseline images for ${specFile} before running Cypress...`);
+
+  try {
+    const deletedBaselineFiles = resetBaselineForSpec(specFile);
+
+    if (deletedBaselineFiles.length === 0) {
+      console.log('No existing baseline images were found for this spec.');
+    } else {
+      console.log(`Removed ${deletedBaselineFiles.length} baseline image(s) so they can be recreated from the current run.`);
+    }
+  } catch (error) {
+    console.error('Error resetting baseline images:', error.message);
+    process.exit(1);
+  }
+
+  console.log('');
 }
 
 console.log(`Running: ${command}\n`);
@@ -41,6 +63,12 @@ if (hasJsonReportOutput()) {
     ensureReportDir();
     console.log('Generating visual HTML report from the current run output...');
     execSync('npx cypress-image-diff-html-report generate', { stdio: 'inherit' });
+
+    if (bundleVisualAssetsForReport()) {
+      console.log('Bundled visual screenshots into the report output for portable artifact viewing.');
+    } else {
+      console.log('Report generated, but no screenshot bundle was created.');
+    }
   } catch (error) {
     reportGenerationFailed = true;
     console.error('Error generating report:', error.message);

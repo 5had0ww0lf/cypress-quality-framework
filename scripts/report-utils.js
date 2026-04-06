@@ -3,6 +3,14 @@ const path = require('path');
 
 const reportDir = path.join(__dirname, '../cypress-image-diff-html-report');
 const tempJsonDir = path.join(__dirname, '../cypress-image-diff/cypress-visual-report');
+const visualScreenshotsDir = path.join(__dirname, '../cypress-image-diff/cypress-visual-screenshots');
+const baselineScreenshotsDir = path.join(visualScreenshotsDir, 'baseline');
+const bundledScreenshotsDir = path.join(
+  reportDir,
+  'cypress-image-diff',
+  'cypress-visual-screenshots'
+);
+const reportIndexPath = path.join(reportDir, 'index.html');
 
 function ensureReportDir() {
   fs.mkdirSync(reportDir, { recursive: true });
@@ -10,6 +18,23 @@ function ensureReportDir() {
 
 function hasJsonReportOutput() {
   return fs.existsSync(tempJsonDir);
+}
+
+function resetBaselineForSpec(specFile) {
+  if (!fs.existsSync(baselineScreenshotsDir)) {
+    return [];
+  }
+
+  const specName = path.basename(specFile, '.js');
+  const snapshotPrefix = `${specName}-`;
+  const deletedBaselineFiles = fs.readdirSync(baselineScreenshotsDir)
+    .filter(file => file.startsWith(snapshotPrefix) && file.endsWith('.png'));
+
+  deletedBaselineFiles.forEach(file => {
+    fs.unlinkSync(path.join(baselineScreenshotsDir, file));
+  });
+
+  return deletedBaselineFiles;
 }
 
 function cleanupJsonReports() {
@@ -32,8 +57,36 @@ function cleanupJsonReports() {
   return jsonFiles;
 }
 
+function bundleVisualAssetsForReport() {
+  if (!fs.existsSync(visualScreenshotsDir) || !fs.existsSync(reportIndexPath)) {
+    return false;
+  }
+
+  fs.rmSync(path.join(reportDir, 'cypress-image-diff'), { recursive: true, force: true });
+  fs.mkdirSync(path.dirname(bundledScreenshotsDir), { recursive: true });
+  fs.cpSync(visualScreenshotsDir, bundledScreenshotsDir, { recursive: true });
+
+  const html = fs.readFileSync(reportIndexPath, 'utf8');
+  const updatedHtml = html.replace(
+    /window\.__injectedData__ = ([\s\S]*?)<\/script>/,
+    (_, injectedData) => {
+      const normalizedData = injectedData
+        .replace(/\.\.\\\\cypress-image-diff\\\\/g, './cypress-image-diff/')
+        .replace(/\\\\/g, '/');
+
+      return `window.__injectedData__ = ${normalizedData}</script>`;
+    }
+  );
+
+  fs.writeFileSync(reportIndexPath, updatedHtml);
+
+  return true;
+}
+
 module.exports = {
+  bundleVisualAssetsForReport,
   hasJsonReportOutput,
+  resetBaselineForSpec,
   cleanupJsonReports,
   ensureReportDir
 };

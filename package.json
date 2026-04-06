@@ -7,7 +7,8 @@
     "visual:baseline": "node scripts/run-visual-tests.js visual/visual-baseline.cy.js --env updateSnapshots=true",
     "visual:responsive": "node scripts/run-visual-tests.js visual/visual-responsive.cy.js",
     "visual:all": "node scripts/run-visual-tests.js visual/*.cy.js",
-    "lint": "eslint . --ext .js"
+    "lint": "eslint . --ext .js",
+    "quality:run": "npm run e2e:run && npm run visual:run && npm run lighthouse:run"
   },
   "overrides": {
     "cookie": "^0.7.2",

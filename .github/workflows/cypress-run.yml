@@ -50,14 +50,12 @@ jobs:
       - name: Run visual baseline suite
         run: npm run visual:run
 
-      - name: Upload visual regression artifacts
+      - name: Upload visual regression report artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: visual-regression-artifacts
-          path: |
-            cypress-image-diff-html-report/
-            cypress-image-diff/cypress-visual-screenshots/
+          name: visual-regression-report
+          path: cypress-image-diff-html-report/
 
   lighthouse-audit:
     runs-on: windows-latest
