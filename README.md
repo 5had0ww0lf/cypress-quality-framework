@@ -9,7 +9,7 @@ A Cypress-based quality engineering portfolio project built around the GreenKart
 - Lighthouse performance, accessibility, best-practices, and SEO auditing
 - Maintainable test design through Page Object Model, fixtures, and support utilities
 - Capability-based project structure designed to scale into API and accessibility testing
-- GitHub Actions execution with artifact publishing for reports and baseline assets
+- GitHub Actions execution with artifact publishing for reports
 
 ## Implemented Capabilities
 
@@ -34,6 +34,7 @@ The visual suites in `cypress/e2e/visual/` cover:
 - tracked baseline snapshots with generated comparison and diff output ignored from Git
 
 Visual report generation is automatic when the visual workflow runs.
+Local runs keep the HTML report lightweight, while CI bundles screenshot assets into the report artifact for portable review.
 
 ### Lighthouse Auditing
 

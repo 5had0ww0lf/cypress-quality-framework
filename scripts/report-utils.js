@@ -5,9 +5,9 @@ const reportDir = path.join(__dirname, '../cypress-image-diff-html-report');
 const tempJsonDir = path.join(__dirname, '../cypress-image-diff/cypress-visual-report');
 const visualScreenshotsDir = path.join(__dirname, '../cypress-image-diff/cypress-visual-screenshots');
 const baselineScreenshotsDir = path.join(visualScreenshotsDir, 'baseline');
+const bundledVisualAssetsDir = path.join(reportDir, 'cypress-image-diff');
 const bundledScreenshotsDir = path.join(
-  reportDir,
-  'cypress-image-diff',
+  bundledVisualAssetsDir,
   'cypress-visual-screenshots'
 );
 const reportIndexPath = path.join(reportDir, 'index.html');
@@ -37,6 +37,15 @@ function resetBaselineForSpec(specFile) {
   return deletedBaselineFiles;
 }
 
+function cleanupBundledVisualAssets() {
+  if (!fs.existsSync(bundledVisualAssetsDir)) {
+    return false;
+  }
+
+  fs.rmSync(bundledVisualAssetsDir, { recursive: true, force: true });
+  return true;
+}
+
 function cleanupJsonReports() {
   if (!fs.existsSync(tempJsonDir)) {
     return [];
@@ -62,7 +71,7 @@ function bundleVisualAssetsForReport() {
     return false;
   }
 
-  fs.rmSync(path.join(reportDir, 'cypress-image-diff'), { recursive: true, force: true });
+  cleanupBundledVisualAssets();
   fs.mkdirSync(path.dirname(bundledScreenshotsDir), { recursive: true });
   fs.cpSync(visualScreenshotsDir, bundledScreenshotsDir, { recursive: true });
 
@@ -85,6 +94,7 @@ function bundleVisualAssetsForReport() {
 
 module.exports = {
   bundleVisualAssetsForReport,
+  cleanupBundledVisualAssets,
   hasJsonReportOutput,
   resetBaselineForSpec,
   cleanupJsonReports,

@@ -3,6 +3,7 @@
 const { execSync } = require('child_process');
 const {
   bundleVisualAssetsForReport,
+  cleanupBundledVisualAssets,
   hasJsonReportOutput,
   resetBaselineForSpec,
   cleanupJsonReports,
@@ -12,6 +13,8 @@ const {
 const specFile = process.argv[2];
 const additionalArgs = process.argv.slice(3).join(' ');
 const shouldUpdateBaselines = /\bupdateSnapshots=true\b/i.test(additionalArgs);
+const shouldBundleVisualReport = process.env.CI === 'true'
+  || process.env.BUNDLE_VISUAL_REPORT === 'true';
 
 if (!specFile) {
   console.error('Error: spec file required');
@@ -64,10 +67,18 @@ if (hasJsonReportOutput()) {
     console.log('Generating visual HTML report from the current run output...');
     execSync('npx cypress-image-diff-html-report generate', { stdio: 'inherit' });
 
-    if (bundleVisualAssetsForReport()) {
+    if (shouldBundleVisualReport && bundleVisualAssetsForReport()) {
       console.log('Bundled visual screenshots into the report output for portable artifact viewing.');
-    } else {
+    } else if (shouldBundleVisualReport) {
       console.log('Report generated, but no screenshot bundle was created.');
+    } else {
+      const removedBundledAssets = cleanupBundledVisualAssets();
+
+      if (removedBundledAssets) {
+        console.log('Report generated and stale bundled screenshots were removed from the report output.');
+      } else {
+        console.log('Report generated without bundling screenshots into the report output.');
+      }
     }
   } catch (error) {
     reportGenerationFailed = true;
