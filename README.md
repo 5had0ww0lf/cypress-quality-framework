@@ -64,6 +64,7 @@ cypress-quality-framework/
 |   |-- support/
 |   |   |-- commands/
 |   |   |   `-- index.js
+|   |   |-- e2e.js
 |   |   |-- pages/
 |   |   |   `-- GreenKartPage.js
 |   |   `-- utils/
@@ -78,6 +79,8 @@ cypress-quality-framework/
 |-- cypress-image-diff/
 |   `-- cypress-visual-screenshots/
 |       `-- baseline/
+|-- cypress-image-diff-html-report/
+|   `-- index.html
 |-- cypress-image-diff-html-report.config.js
 |-- cypress-image-diff.config.js
 |-- lighthouse-reports/
@@ -86,6 +89,8 @@ cypress-quality-framework/
 |   |-- report-utils.js
 |   `-- run-visual-tests.js
 |-- cypress.config.js
+|-- eslint.config.js
+|-- package-lock.json
 |-- package.json
 `-- README.md
 ```
