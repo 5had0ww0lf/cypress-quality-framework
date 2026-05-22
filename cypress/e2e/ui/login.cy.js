@@ -2,13 +2,19 @@ import LoginPage from '../../support/pages/LoginPage';
 
 describe('Admin Login Tests', () => {
 
+  let credentials
+
   beforeEach(() => {
+    cy.fixture('login').then((data) => {
+      credentials = data
+    })
     cy.visit('/')
     LoginPage.accessAdminPage()
   });
 
   it('should login successfully with valid credentials', () =>{
-    cy.login('admin', 'password')
+    const { username, password } = credentials.validCredentials
+    cy.login(username, password)
     LoginPage.validateLogin()
       .should('be.visible')
     LoginPage.logout()
@@ -17,7 +23,8 @@ describe('Admin Login Tests', () => {
   })
 
   it('should show error when correct username and wrong password are provided', () =>{
-    cy.login('admin', 'test')
+    const { username, password } = credentials.invalidPassword
+    cy.login(username, password)
 
     LoginPage.errorMessage()
       .should('be.visible')
@@ -25,7 +32,8 @@ describe('Admin Login Tests', () => {
   })
   
   it('should show error when wrong username and correct password are provided', () =>{
-    cy.login('test', 'password')
+    const { username, password } = credentials.invalidUsername
+    cy.login(username, password)
 
     LoginPage.errorMessage()
       .should('be.visible')
