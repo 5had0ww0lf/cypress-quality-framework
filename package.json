@@ -1,0 +1,15 @@
+{
+  "name": "cypress-quality-framework",
+  "version": "1.0.0",
+  "description": "Cypress-based test framework demonstrating E2E, visual regression, API, and Lighthouse auditing — built as a portfolio for quality engineering roles.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Lucas Nascimento",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^15.15.0"
+  }
+}
