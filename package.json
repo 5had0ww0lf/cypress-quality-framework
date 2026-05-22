@@ -10,6 +10,10 @@
   "author": "Lucas Nascimento",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^15.15.0"
+    "@eslint/js": "^10.0.1",
+    "cypress": "^15.15.0",
+    "eslint": "^10.4.0",
+    "eslint-plugin-cypress": "^6.4.1",
+    "globals": "^17.6.0"
   }
 }
