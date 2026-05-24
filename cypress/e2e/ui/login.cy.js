@@ -9,7 +9,7 @@ describe('Admin Login Tests', () => {
       credentials = data
     })
     cy.visit('/')
-    LoginPage.accessAdminPage()
+    cy.accessAdminPage()
   });
 
   it('should login successfully with valid credentials', () =>{
@@ -26,7 +26,7 @@ describe('Admin Login Tests', () => {
     const { username, password } = credentials.invalidPassword
     cy.login(username, password)
 
-    LoginPage.errorMessage()
+    cy.getErrorMessage()
       .should('be.visible')
       .and('contain', 'Invalid')
   })
@@ -35,7 +35,7 @@ describe('Admin Login Tests', () => {
     const { username, password } = credentials.invalidUsername
     cy.login(username, password)
 
-    LoginPage.errorMessage()
+    cy.getErrorMessage()
       .should('be.visible')
       .and('contain', 'Invalid')  
   })
@@ -43,7 +43,7 @@ describe('Admin Login Tests', () => {
   it('should show error when username and password are empty', () =>{
     LoginPage.loginButton()
 
-    LoginPage.errorMessage()
+    cy.getErrorMessage()
       .should('be.visible')
       .and('contain', 'Invalid')     
   })  

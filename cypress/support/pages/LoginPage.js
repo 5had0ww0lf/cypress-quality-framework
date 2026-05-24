@@ -1,10 +1,4 @@
 class LoginPage {
-    
-  accessAdminPage(){
-    cy.get('a.nav-link[href="/admin"]')
-      .should('be.visible')
-      .click()
-  }
 
   loginButton(){
     cy.get('#doLogin').click()
@@ -24,10 +18,6 @@ class LoginPage {
     cy.contains('button', 'Logout')
       .click()
     
-  }
-
-  errorMessage(){
-    return cy.get('div.alert.alert-danger')
   }
 
 }

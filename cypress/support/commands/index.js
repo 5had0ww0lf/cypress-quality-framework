@@ -29,3 +29,13 @@ import LoginPage from '../pages/LoginPage';
 Cypress.Commands.add('login', (username, password) => {
   LoginPage.login(username, password)
 })
+
+Cypress.Commands.add('getErrorMessage', () => {
+  return cy.get('div.alert.alert-danger')
+})
+
+Cypress.Commands.add('accessAdminPage', () =>{
+  cy.get('a.nav-link[href="/admin"]')
+    .should('be.visible')
+    .click()  
+});

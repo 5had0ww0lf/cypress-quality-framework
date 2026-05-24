@@ -1,0 +1,19 @@
+{
+  "newRoom": {
+    "type": "Suite",
+    "accessibleTag": "false",
+    "price": "500"
+  },
+  "existingRoom": {
+    "type": "Family",
+    "accessibleTag": "true",
+    "price": "300"
+  },
+  "updatedRoom": {
+    "newPrice": "250"
+  },
+  "invalidRoomFormat":{
+    "invalidNumber": "test",
+    "invalidPrice": "test"    
+  }
+}
