@@ -4,7 +4,11 @@
   "description": "Cypress-based test framework demonstrating E2E, visual regression, API, and Lighthouse auditing — built as a portfolio for quality engineering roles.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cy:open": "cypress open",
+    "e2e:run": "cypress run --spec 'cypress/e2e/ui/**/*.cy.js'",
+    "visual:run": "cypress run --spec 'cypress/e2e/visual/**/*.cy.js' && npm run visual:report",
+    "visual:baseline": "cypress run --spec 'cypress/e2e/visual/**/*.cy.js' --env updateSnapshots=true",
+    "visual:report": "cypress-image-diff-html-report-cli"
   },
   "keywords": [],
   "author": "Lucas Nascimento",
@@ -12,6 +16,8 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "cypress": "^15.15.0",
+    "cypress-image-diff-html-report": "^2.2.0",
+    "cypress-image-diff-js": "^2.8.0",
     "eslint": "^10.4.0",
     "eslint-plugin-cypress": "^6.4.1",
     "globals": "^17.6.0"
