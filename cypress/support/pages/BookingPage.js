@@ -35,10 +35,9 @@ class BookingPage {
       .click()
   }
 
-validateBooking() {
-  return cy.get('div.card-body > h2')
-}
-
+  validateBooking() {
+    return cy.get('div.card-body > h2')
+  }
 
 }
 
