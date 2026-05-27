@@ -1,0 +1,18 @@
+[
+  { 
+    "name": "homepage", 
+    "url": "/" 
+  },
+  { 
+    "name": "room-single", 
+    "url": "/reservation/1" 
+  },
+  { 
+    "name": "room-double", 
+    "url": "/reservation/2" 
+  },
+  { 
+    "name": "room-suite", 
+    "url": "/reservation/3" 
+  }
+]

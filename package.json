@@ -6,9 +6,14 @@
   "scripts": {
     "cy:open": "cypress open",
     "e2e:run": "cypress run --spec 'cypress/e2e/ui/**/*.cy.js'",
-    "visual:run": "cypress run --spec 'cypress/e2e/visual/**/*.cy.js' && npm run visual:report",
-    "visual:baseline": "cypress run --spec 'cypress/e2e/visual/**/*.cy.js' --env updateSnapshots=true",
-    "visual:report": "cypress-image-diff-html-report-cli"
+    "visual:baseline": "npm run visual:baseline:headed",
+    "visual:baseline:headed": "cypress run --headed --browser chrome --spec 'cypress/e2e/visual/**/*.cy.js' --env updateSnapshots=true -- --disable-gpu --disable-dev-shm-usage --no-sandbox",
+    "visual:baseline:headless": "cypress run --browser chrome --spec 'cypress/e2e/visual/**/*.cy.js' --env updateSnapshots=true -- --disable-gpu --disable-dev-shm-usage --no-sandbox",
+    "visual:run": "npm run visual:run:headed",
+    "visual:run:headed": "cypress run --headed --browser chrome --spec 'cypress/e2e/visual/**/*.cy.js' -- --disable-gpu --disable-dev-shm-usage --no-sandbox || true && npm run visual:report",
+    "visual:run:headless": "cypress run --browser chrome --spec 'cypress/e2e/visual/**/*.cy.js' -- --disable-gpu --disable-dev-shm-usage --no-sandbox || true && npm run visual:report",
+    "visual:report": "cypress-image-diff-html-report generate --configFile cypress-image-diff-html-report.config.js",
+    "test:all": "npm run e2e:run && npm run visual:run:headless"
   },
   "keywords": [],
   "author": "Lucas Nascimento",

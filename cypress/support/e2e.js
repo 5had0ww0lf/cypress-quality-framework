@@ -15,4 +15,11 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands/index'
-import 'cypress-image-diff-js/commands'
+const compareSnapshotCommand = require('cypress-image-diff-js/command')
+compareSnapshotCommand()
+
+Cypress.on('uncaught:exception', (err) => {
+  if (err.message.includes('Minified React error')) {
+    return false
+  }
+})

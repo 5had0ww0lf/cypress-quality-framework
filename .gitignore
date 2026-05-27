@@ -142,7 +142,8 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 
-#cypress-image-diff-html
-cypress-image-diff/screenshots/actual
-cypress-image-diff/screenshots/diff
-cypress-image-diff/report
+# Cypress
+cypress/screenshots
+
+# cypress-image-diff
+cypress-image-diff
