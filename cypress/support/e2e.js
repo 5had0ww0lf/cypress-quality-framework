@@ -15,6 +15,7 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands/index'
+
 const compareSnapshotCommand = require('cypress-image-diff-js/command')
 compareSnapshotCommand()
 

@@ -55,7 +55,7 @@ export const preparePageForScreenshot = (page) => {
   resetCss()
   disableAnimationsAndWidgets()
   staticNavBar()
-  if (page.url !== '/') {
+  if (page.needsDates) {
     hideElementIfPresent('.shadow.booking-card')
   }
   // ensure fonts and images have loaded before taking snapshots

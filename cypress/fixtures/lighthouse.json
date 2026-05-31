@@ -1,0 +1,38 @@
+{
+  "desktop": {
+    "thresholds": {
+      "performance": 70,
+      "accessibility": 75,
+      "best-practices": 95,
+      "seo": 95
+    },
+    "config": {
+      "output": "html",
+      "formFactor": "desktop",
+      "screenEmulation": {
+        "width": 1280,
+        "height": 720,
+        "deviceScaleFactor": 1,
+        "mobile": false
+      }
+    }
+  },
+  "mobile": {
+    "thresholds": {
+      "performance": 50,
+      "accessibility": 70,
+      "best-practices": 95,
+      "seo": 95
+    },
+    "config": {
+      "output": "html",
+      "formFactor": "mobile",
+      "screenEmulation": {
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 2,
+        "mobile": true
+      }
+    }
+  }
+}

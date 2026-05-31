@@ -25,6 +25,7 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import LoginPage from '../pages/LoginPage';
+import { lighthouse } from '@cypress-audit/lighthouse'
 
 Cypress.Commands.add('login', (username, password) => {
   LoginPage.login(username, password)
@@ -37,5 +38,9 @@ Cypress.Commands.add('getErrorMessage', () => {
 Cypress.Commands.add('accessAdminPage', () =>{
   cy.get('a.nav-link[href="/admin"]')
     .should('be.visible')
-    .click()  
+    .click()
 });
+
+Cypress.Commands.add('lighthouse', (thresholds, opts, config) => {
+  lighthouse(thresholds, {}, config)
+})

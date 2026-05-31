@@ -1,5 +1,5 @@
 import BookingPage from '../../support/pages/BookingPage';
-import { generateRandomDates } from '../../support/utils/bookingUtils';
+import { generateRandomDates } from '../../support/utils/dateUtils';
 
 describe('Book Room', () => {
   

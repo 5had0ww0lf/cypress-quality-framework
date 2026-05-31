@@ -1,0 +1,23 @@
+[
+  { 
+    "name": "homepage", 
+    "url": "/",
+    "lighthouse": true 
+  },
+  { 
+    "name": "room-single", 
+    "url": "/reservation/1",
+    "needsDates": true,
+    "lighthouse": true
+  },
+  { 
+    "name": "room-double", 
+    "url": "/reservation/2",
+    "needsDates": true 
+  },
+  { 
+    "name": "room-suite", 
+    "url": "/reservation/3",
+    "needsDates": true
+  }
+]
